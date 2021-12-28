@@ -64,7 +64,7 @@ namespace VulkanEngine
         std::vector<VkVertexInputAttributeDescription> attribute(2);
         attribute[0].binding = 0;
         attribute[0].offset = offsetof(Vertex, position);
-        attribute[0].format = VK_FORMAT_R32G32_SFLOAT;
+        attribute[0].format = VK_FORMAT_R32G32B32_SFLOAT;
         attribute[0].location = 0;
 
         attribute[1].binding = 0;

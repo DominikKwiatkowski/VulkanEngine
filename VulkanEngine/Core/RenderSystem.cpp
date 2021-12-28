@@ -8,8 +8,7 @@ namespace VulkanEngine
 {
     struct PushConstantData
     {
-        glm::mat2 transform{ 1.f };
-        glm::vec2 offsetField;
+        glm::mat4 transform{ 1.f };
         alignas(16)glm::vec3 color;
     };
 
@@ -65,10 +64,11 @@ namespace VulkanEngine
         pipeline->Bind(commandBuffer);
         for (auto& obj : gameObjects)
         {
+            obj.transform.rotation.y = glm::mod(obj.transform.rotation.y + 0.001f, glm::two_pi<float>());
+            obj.transform.rotation.x = glm::mod(obj.transform.rotation.x + 0.0005f, glm::two_pi<float>());
             PushConstantData push{};
-            push.offsetField = obj.transform2d.translation;
             push.color = obj.color;
-            push.transform = obj.transform2d.mat2();
+            push.transform = obj.transform.mat4();
 
             vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantData), &push);
             obj.model->Bind(commandBuffer);

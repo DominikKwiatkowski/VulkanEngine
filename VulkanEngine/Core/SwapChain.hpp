@@ -40,6 +40,12 @@ namespace VulkanEngine {
         VkResult AcquireNextImage(uint32_t* imageIndex);
         VkResult SubmitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex);
 
+        bool compareSwapFormat(const SwapChain& swapChain) const
+        {
+            return swapChainImageFormat == swapChain.swapChainImageFormat &&
+                swapChainDepthFormat == swapChain.swapChainDepthFormat;
+        }
+
     private:
         void CreateSwapChain();
         void CreateImageViews();
@@ -57,6 +63,7 @@ namespace VulkanEngine {
         VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
         VkFormat swapChainImageFormat;
+        VkFormat swapChainDepthFormat;
         VkExtent2D swapChainExtent;
 
         std::vector<VkFramebuffer> swapChainFramebuffers;

@@ -45,6 +45,8 @@
     <ClCompile Include="VulkanEngine\Core\Device.cpp" />
     <ClCompile Include="VulkanEngine\Core\SwapChain.cpp" />
     <ClCompile Include="VulkanEngine\Core\Model.cpp" />
+    <ClCompile Include="VulkanEngine\Core\Renderer.cpp" />
+    <ClCompile Include="VulkanEngine\Core\RenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VulkanEngine\Core\App.hpp">
@@ -66,6 +68,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VulkanEngine\Core\GameObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanEngine\Core\Renderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanEngine\Core\RenderSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

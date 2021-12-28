@@ -44,7 +44,7 @@ namespace VulkanEngine
 
         std::shared_ptr<Model> model{};
         glm::vec3 color{};
-        Transfrom2dComponent transfrom2d{};
+        Transfrom2dComponent transform2d{};
 
     private:
         GameObject(id_t id) : id(id){}

@@ -164,6 +164,8 @@
     <ClCompile Include="VulkanEngine\Core\Device.cpp" />
     <ClCompile Include="VulkanEngine\Core\Model.cpp" />
     <ClCompile Include="VulkanEngine\Core\Pipeline.cpp" />
+    <ClCompile Include="VulkanEngine\Core\Renderer.cpp" />
+    <ClCompile Include="VulkanEngine\Core\RenderSystem.cpp" />
     <ClCompile Include="VulkanEngine\Core\SwapChain.cpp" />
     <ClCompile Include="VulkanEngine\Core\Window.cpp" />
     <ClCompile Include="VulkanEngine\main.cpp" />
@@ -174,6 +176,8 @@
     <ClInclude Include="VulkanEngine\Core\GameObject.hpp" />
     <ClInclude Include="VulkanEngine\Core\Model.hpp" />
     <ClInclude Include="VulkanEngine\Core\Pipeline.hpp" />
+    <ClInclude Include="VulkanEngine\Core\Renderer.hpp" />
+    <ClInclude Include="VulkanEngine\Core\RenderSystem.hpp" />
     <ClInclude Include="VulkanEngine\Core\SwapChain.hpp" />
     <ClInclude Include="VulkanEngine\Core\Window.hpp" />
   </ItemGroup>

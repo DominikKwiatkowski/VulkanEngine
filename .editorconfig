@@ -1,0 +1,5 @@
+
+[*]
+
+# ReSharper properties
+resharper_linkage_specification_braces = next_line

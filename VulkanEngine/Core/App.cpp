@@ -34,7 +34,7 @@ namespace VulkanEngine
             float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
             currentTime = newTime;
 
-            cameraController.MoveInPlane(window.GetGLFWWindow(), frameTime, cameraObject);
+            cameraController.MoveInPlane(window, frameTime, cameraObject);
             camera.SetViewYXZ(cameraObject.transform.translation, cameraObject.transform.rotation);
 
             float aspect = renderer.GetAspectRatio();

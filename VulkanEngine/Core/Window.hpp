@@ -2,6 +2,9 @@
 #define GLFW_INCLUDE_VULKAN
 #include <string>
 #include <GLFW/glfw3.h>
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/glm.hpp>
 
 namespace VulkanEngine
 {
@@ -37,15 +40,26 @@ namespace VulkanEngine
         {
             return pWindow;
         }
+
+        glm::dvec2 GetMousePos()
+        {
+            return mousePos;
+        }
+
+        void CenterMousePos();
     private:
-        static void FrambufferResizeCallback(GLFWwindow* window, int width, int height);
+        static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
+        static void OnMauseMoveCallback(GLFWwindow* window, double xpos, double ypos);
+        static void OnFocusCallback(GLFWwindow* window, int focus);
         GLFWwindow *pWindow;
         std::string windowName;
 
         int width;
         int height;
         bool framebufferResized = false;
-
+        bool focusedRegeined = true;
+        bool focused = true;
+        glm::dvec2 mousePos = {};
         void InitWindow();
     };
 }

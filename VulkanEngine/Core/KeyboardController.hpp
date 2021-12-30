@@ -21,11 +21,13 @@ namespace VulkanEngine
             int lookDown = GLFW_KEY_DOWN;
         };
 
-        void MoveInPlane(GLFWwindow* window, float dt, GameObject& object);
+        void MoveInPlane(Window &window, float dt, GameObject& object);
 
 
         KeyMappings keys{};
         float moveSpeed{ 3.f };
         float lookSpeed{ 1.5f };
+
+        glm::dvec2 OldMousePos;
     };
 }

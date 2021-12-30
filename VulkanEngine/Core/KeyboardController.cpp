@@ -3,32 +3,31 @@
 
 namespace VulkanEngine
 {
-    void KeyboardController::MoveInPlane(GLFWwindow* window, float dt, GameObject& object)
+    void KeyboardController::MoveInPlane(Window &window, float dt, GameObject& object)
     {
-        glm::vec3 rotate{ 0 };
+        if ((OldMousePos.x - (window.getExtent().width / 2.0) < glm::epsilon<double>()) &&
+           (( OldMousePos.y - window.getExtent().height / 2.0 < glm::epsilon<double>())))
+        {
+            auto xMove = (OldMousePos.x - window.GetMousePos().x) / window.getExtent().width * 10;
+            auto yMove = (OldMousePos.y - window.GetMousePos().y) / window.getExtent().height * 10;
 
-        if (glfwGetKey(window, keys.lookRight) == GLFW_PRESS)
-        {
-            rotate.y += 1.f;
-        }
-        if (glfwGetKey(window, keys.lookLeft) == GLFW_PRESS)
-        {
-            rotate.y -= 1.f;
-        }
-        if (glfwGetKey(window, keys.lookUp) == GLFW_PRESS)
-        {
-            rotate.x += 1.f;
-        }
-        if (glfwGetKey(window, keys.lookDown) == GLFW_PRESS)
-        {
-            rotate.x -= 1.f;
+            glm::vec3 rotate{ 0 };
+
+            rotate.x += static_cast<float>(yMove);
+            rotate.y -= static_cast<float>(xMove);
+
+
+            if (glm::dot(rotate, rotate) > std::numeric_limits<float>::epsilon())
+                object.transform.rotation += lookSpeed * glm::normalize(rotate) * dt;
+
+            object.transform.rotation.x = glm::clamp(object.transform.rotation.x, -1.5f, 1.5f);
+            object.transform.rotation.y = glm::mod(object.transform.rotation.y, glm::two_pi<float>());
+
         }
 
-        if (glm::dot(rotate, rotate) > std::numeric_limits<float>::epsilon())
-            object.transform.rotation += lookSpeed * glm::normalize(rotate) * dt;
-
-        object.transform.rotation.x = glm::clamp(object.transform.rotation.x, -1.5f, 1.5f);
-        object.transform.rotation.y = glm::mod(object.transform.rotation.y, glm::two_pi<float>());
+        OldMousePos.x = window.getExtent().width / 2.0;
+        OldMousePos.y = window.getExtent().height / 2.0;
+        window.CenterMousePos();
 
         float yaw = object.transform.rotation.y;
         const glm::vec3 forwardDir(sin(yaw), 0.f, cos(yaw));
@@ -36,27 +35,27 @@ namespace VulkanEngine
         const glm::vec3 upDir(0.f, -1.f, 0.f);
 
         glm::vec3 moveDir(0.f);
-        if (glfwGetKey(window, keys.moveForward) == GLFW_PRESS)
+        if (glfwGetKey(window.GetGLFWWindow(), keys.moveForward) == GLFW_PRESS)
         {
             moveDir += forwardDir;
         }
-        if (glfwGetKey(window, keys.moveBackward) == GLFW_PRESS)
+        if (glfwGetKey(window.GetGLFWWindow(), keys.moveBackward) == GLFW_PRESS)
         {
             moveDir -= forwardDir;
         }
-        if (glfwGetKey(window, keys.moveRight) == GLFW_PRESS)
+        if (glfwGetKey(window.GetGLFWWindow(), keys.moveRight) == GLFW_PRESS)
         {
             moveDir += rightDir;
         }
-        if (glfwGetKey(window, keys.moveLeft) == GLFW_PRESS)
+        if (glfwGetKey(window.GetGLFWWindow(), keys.moveLeft) == GLFW_PRESS)
         {
             moveDir -= rightDir;
         }
-        if (glfwGetKey(window, keys.moveUp) == GLFW_PRESS)
+        if (glfwGetKey(window.GetGLFWWindow(), keys.moveUp) == GLFW_PRESS)
         {
             moveDir += upDir;
         }
-        if (glfwGetKey(window, keys.moveDown) == GLFW_PRESS)
+        if (glfwGetKey(window.GetGLFWWindow(), keys.moveDown) == GLFW_PRESS)
         {
             moveDir -= upDir;
         }

@@ -32,6 +32,11 @@ namespace VulkanEngine
         }
 
         void CreateWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
+
+        GLFWwindow* GetGLFWWindow()
+        {
+            return pWindow;
+        }
     private:
         static void FrambufferResizeCallback(GLFWwindow* window, int width, int height);
         GLFWwindow *pWindow;

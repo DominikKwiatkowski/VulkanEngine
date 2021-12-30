@@ -57,8 +57,8 @@ namespace VulkanEngine
         shaderStages[1].flags = 0;
         shaderStages[1].pSpecializationInfo = nullptr;
 
-        auto bindingDescription = Model::Vertex::getBindingDescription();
-        auto attributeDescription = Model::Vertex::getAttributeDescriptions();
+        auto bindingDescription = Model::Vertex::GetBindingDescription();
+        auto attributeDescription = Model::Vertex::GetAttributeDescriptions();
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescription.size());

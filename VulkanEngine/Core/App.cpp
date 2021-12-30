@@ -2,6 +2,7 @@
 #include "App.hpp"
 #include "RenderSystem.hpp"
 #include <array>
+#include <chrono>
 #include <stdexcept>
 
 namespace VulkanEngine
@@ -19,19 +20,30 @@ namespace VulkanEngine
 
     void App::run()
     {
-        std::vector<glm::vec3> colors{
-        {1.f, 0.f, 0.f},
-        {0.f, 1.0f, 0.f} //
-        };
-
+        Camera camera{};
         RenderSystem renderSystem{ device,renderer.getSwapChainRenderPass() };
+
+        auto cameraObject = GameObject::CreateGameObject();
+        KeyboardController cameraController{};
+
+        auto currentTime = std::chrono::high_resolution_clock::now();
         while(!window.ShouldClose())
         {
             glfwPollEvents();
+            auto newTime = std::chrono::high_resolution_clock::now();
+            float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+            currentTime = newTime;
+
+            cameraController.MoveInPlane(window.GetGLFWWindow(), frameTime, cameraObject);
+            camera.SetViewYXZ(cameraObject.transform.translation, cameraObject.transform.rotation);
+
+            float aspect = renderer.GetAspectRatio();
+            camera.SetPerspectiveProjection(glm::radians(50.0f), aspect, 0.1f, 10);
+
             if(auto commandBuffer = renderer.BeginFrame())
             {
                 renderer.BeginSwapChainRenderPass(commandBuffer);
-                renderSystem.RenderGameObjects(commandBuffer, gameObjects);
+                renderSystem.RenderGameObjects(commandBuffer, gameObjects, camera);
                 renderer.EndSwapChainRenderPass(commandBuffer);
                 renderer.EndFrame();
             }
@@ -41,59 +53,14 @@ namespace VulkanEngine
     }
 
     void App::LoadGameObjects() {
-        std::vector<Model::Vertex> vertices{
-            // left face (white)
-      {{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
-      {{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
-      {{-.5f, -.5f, .5f}, {.9f, .9f, .9f}},
-      {{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
-      {{-.5f, .5f, -.5f}, {.9f, .9f, .9f}},
-      {{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
 
-      // right face (yellow)
-      {{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
-      {{.5f, .5f, .5f}, {.8f, .8f, .1f}},
-      {{.5f, -.5f, .5f}, {.8f, .8f, .1f}},
-      {{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
-      {{.5f, .5f, -.5f}, {.8f, .8f, .1f}},
-      {{.5f, .5f, .5f}, {.8f, .8f, .1f}},
 
-      // top face (orange, remember y axis points down)
-      {{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-      {{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-      {{-.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-      {{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-      {{.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-      {{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
 
-      // bottom face (red)
-      {{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-      {{.5f, .5f, .5f}, {.8f, .1f, .1f}},
-      {{-.5f, .5f, .5f}, {.8f, .1f, .1f}},
-      {{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-      {{.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-      {{.5f, .5f, .5f}, {.8f, .1f, .1f}},
-
-      // nose face (blue)
-      {{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-      {{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-      {{-.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-      {{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-      {{.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-      {{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-
-      // tail face (green)
-      {{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-      {{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-      {{-.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-      {{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-      {{.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-      {{.5f, .5f, -0.5f}, {.1f, .8f, .1f}}, };
-        auto cubeModel = std::make_shared<Model>(device, vertices);
+        std::shared_ptr cubeModel = Model::CreateModelFromFile(device, "models/smooth_vase.obj");
 
         auto cube = GameObject::CreateGameObject();
         cube.model = cubeModel;
-        cube.transform.translation = { 0,0,0.5 };
+        cube.transform.translation = { 0,0,1.5 };
         cube.transform.scale = { 0.5,0.5,0.5 };
         gameObjects.push_back(std::move(cube));
     }

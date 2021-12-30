@@ -103,7 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.2.189.1\Include;D:\domik\Documents\librariesVulkan\glfw-3.3.4.bin.WIN64\include;D:\domik\Documents\librariesVulkan\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\domik\Documents\librariesVulkan\tinyobjloader;C:\VulkanSDK\1.2.189.1\Include;D:\domik\Documents\librariesVulkan\glfw-3.3.4.bin.WIN64\include;D:\domik\Documents\librariesVulkan\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -140,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.2.189.1\Include;D:\domik\Documents\librariesVulkan\glfw-3.3.4.bin.WIN64\include;D:\domik\Documents\librariesVulkan\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\domik\Documents\librariesVulkan\tinyobjloader;C:\VulkanSDK\1.2.189.1\Include;D:\domik\Documents\librariesVulkan\glfw-3.3.4.bin.WIN64\include;D:\domik\Documents\librariesVulkan\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -161,7 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VulkanEngine\Core\App.cpp" />
+    <ClCompile Include="VulkanEngine\Core\Camera.cpp" />
     <ClCompile Include="VulkanEngine\Core\Device.cpp" />
+    <ClCompile Include="VulkanEngine\Core\KeyboardController.cpp" />
     <ClCompile Include="VulkanEngine\Core\Model.cpp" />
     <ClCompile Include="VulkanEngine\Core\Pipeline.cpp" />
     <ClCompile Include="VulkanEngine\Core\Renderer.cpp" />
@@ -172,13 +174,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VulkanEngine\Core\App.hpp" />
+    <ClInclude Include="VulkanEngine\Core\Camera.hpp" />
     <ClInclude Include="VulkanEngine\Core\Device.hpp" />
     <ClInclude Include="VulkanEngine\Core\GameObject.hpp" />
+    <ClInclude Include="VulkanEngine\Core\KeyboardController.hpp" />
     <ClInclude Include="VulkanEngine\Core\Model.hpp" />
     <ClInclude Include="VulkanEngine\Core\Pipeline.hpp" />
     <ClInclude Include="VulkanEngine\Core\Renderer.hpp" />
     <ClInclude Include="VulkanEngine\Core\RenderSystem.hpp" />
     <ClInclude Include="VulkanEngine\Core\SwapChain.hpp" />
+    <ClInclude Include="VulkanEngine\Core\Utils.hpp" />
     <ClInclude Include="VulkanEngine\Core\Window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

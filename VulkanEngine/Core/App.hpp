@@ -9,6 +9,8 @@
 #include "Window.hpp"
 #include "GameObject.hpp"
 #include "Renderer.hpp"
+#include "Camera.hpp"
+#include "KeyboardController.hpp"
 
 namespace VulkanEngine
 {
@@ -28,7 +30,7 @@ namespace VulkanEngine
         Device device{ window };
         Renderer renderer{ window, device };
         std::vector<GameObject> gameObjects;
-        
+
         void LoadGameObjects();
     };
 }

@@ -20,6 +20,11 @@ namespace VulkanEngine
         Renderer(const Renderer&) = delete;
         Renderer& operator=(const Renderer&) = delete;
 
+        float GetAspectRatio() const
+        {
+            return swapChain->ExtentAspectRatio();
+        }
+
         bool isFrameInProgress() const
         {
             return isFrameStarted;

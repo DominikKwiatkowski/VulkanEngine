@@ -23,7 +23,7 @@ namespace VulkanEngine
         glfwSetFramebufferSizeCallback(pWindow, FramebufferResizeCallback);
         glfwSetCursorPosCallback(pWindow, OnMauseMoveCallback);
         glfwSetWindowFocusCallback(pWindow, OnFocusCallback);
-
+        glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         CenterMousePos();
         mousePos.x = width / 2.0;
         mousePos.y = height / 2.0;
@@ -46,7 +46,9 @@ namespace VulkanEngine
 
     void Window::CenterMousePos()
     {
-        glfwSetCursorPos(pWindow, width / 2, height / 2);
+        glfwSetCursorPos(pWindow, width / 2.0, height / 2.0);
+        mousePos.x = width / 2;
+        mousePos.y = height / 2;
     }
 
     void Window::FramebufferResizeCallback(GLFWwindow* window, int width, int height)
@@ -60,14 +62,14 @@ namespace VulkanEngine
     void Window::OnMauseMoveCallback(GLFWwindow* window, double xpos, double ypos)
     {
         auto pWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-        if(!pWindow->focusedRegeined && pWindow->focused)
+        if(!pWindow->focusedRegained && pWindow->focused)
         {
             pWindow->mousePos.x = xpos;
             pWindow->mousePos.y = ypos;
         }
-        else if(pWindow->focusedRegeined)
+        else if(pWindow->focusedRegained)
         {
-            pWindow->focusedRegeined = false;
+            pWindow->focusedRegained = false;
         }
     }
 
@@ -76,7 +78,7 @@ namespace VulkanEngine
         auto pWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
         if(focus)
         {
-            pWindow->focusedRegeined = true;
+            pWindow->focusedRegained = true;
             pWindow->focused = true;
         }
         else

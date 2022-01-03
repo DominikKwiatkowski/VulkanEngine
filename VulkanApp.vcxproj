@@ -161,8 +161,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VulkanEngine\Core\App.cpp" />
+    <ClCompile Include="VulkanEngine\Core\Buffer.cpp" />
     <ClCompile Include="VulkanEngine\Core\Camera.cpp" />
+    <ClCompile Include="VulkanEngine\Core\Descriptors.cpp" />
     <ClCompile Include="VulkanEngine\Core\Device.cpp" />
+    <ClCompile Include="VulkanEngine\Core\GameObject.cpp" />
     <ClCompile Include="VulkanEngine\Core\KeyboardController.cpp" />
     <ClCompile Include="VulkanEngine\Core\Model.cpp" />
     <ClCompile Include="VulkanEngine\Core\Pipeline.cpp" />
@@ -174,8 +177,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VulkanEngine\Core\App.hpp" />
+    <ClInclude Include="VulkanEngine\Core\Buffer.hpp" />
     <ClInclude Include="VulkanEngine\Core\Camera.hpp" />
+    <ClInclude Include="VulkanEngine\Core\Descriptors.hpp" />
     <ClInclude Include="VulkanEngine\Core\Device.hpp" />
+    <ClInclude Include="VulkanEngine\Core\FrameInfo.hpp" />
     <ClInclude Include="VulkanEngine\Core\GameObject.hpp" />
     <ClInclude Include="VulkanEngine\Core\KeyboardController.hpp" />
     <ClInclude Include="VulkanEngine\Core\Model.hpp" />

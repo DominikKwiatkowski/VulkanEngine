@@ -57,7 +57,7 @@ namespace VulkanEngine
         int width;
         int height;
         bool framebufferResized = false;
-        bool focusedRegeined = true;
+        bool focusedRegained = true;
         bool focused = true;
         glm::dvec2 mousePos = {};
         void InitWindow();

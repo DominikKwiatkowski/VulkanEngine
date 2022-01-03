@@ -49,6 +49,9 @@
     <ClCompile Include="VulkanEngine\Core\RenderSystem.cpp" />
     <ClCompile Include="VulkanEngine\Core\Camera.cpp" />
     <ClCompile Include="VulkanEngine\Core\KeyboardController.cpp" />
+    <ClCompile Include="VulkanEngine\Core\GameObject.cpp" />
+    <ClCompile Include="VulkanEngine\Core\Buffer.cpp" />
+    <ClCompile Include="VulkanEngine\Core\Descriptors.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VulkanEngine\Core\App.hpp">
@@ -85,6 +88,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VulkanEngine\Core\Utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanEngine\Core\Buffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanEngine\Core\FrameInfo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanEngine\Core\Descriptors.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

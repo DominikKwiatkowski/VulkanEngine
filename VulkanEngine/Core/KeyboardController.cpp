@@ -3,15 +3,18 @@
 
 namespace VulkanEngine
 {
-    void KeyboardController::MoveInPlane(Window &window, float dt, GameObject& object)
+    void KeyboardController::MoveInPlane(Window& window, float dt, GameObject& object)
     {
-        if ((OldMousePos.x - (window.getExtent().width / 2.0) < glm::epsilon<double>()) &&
-           (( OldMousePos.y - window.getExtent().height / 2.0 < glm::epsilon<double>())))
+        // Check if windows resized. In this case we want to move camera
+        if ((abs(OldWindowSize.x - window.getExtent().width) < glm::epsilon<double>()) &&
+            (abs(OldWindowSize.y - window.getExtent().height) < glm::epsilon<double>()))
         {
-            auto xMove = (OldMousePos.x - window.GetMousePos().x) / window.getExtent().width * 10;
-            auto yMove = (OldMousePos.y - window.GetMousePos().y) / window.getExtent().height * 10;
+            auto xMove = (static_cast<int>(window.getExtent().width / 2) - window.GetMousePos().x) / window.getExtent().
+                width * 10;
+            auto yMove = (static_cast<int>(window.getExtent().height / 2) - window.GetMousePos().y) / window.getExtent()
+                .height * 10;
 
-            glm::vec3 rotate{ 0 };
+            glm::vec3 rotate{0};
 
             rotate.x += static_cast<float>(yMove);
             rotate.y -= static_cast<float>(xMove);
@@ -22,12 +25,12 @@ namespace VulkanEngine
 
             object.transform.rotation.x = glm::clamp(object.transform.rotation.x, -1.5f, 1.5f);
             object.transform.rotation.y = glm::mod(object.transform.rotation.y, glm::two_pi<float>());
-
         }
 
-        OldMousePos.x = window.getExtent().width / 2.0;
-        OldMousePos.y = window.getExtent().height / 2.0;
         window.CenterMousePos();
+        OldWindowSize.x = window.getExtent().width;
+        OldWindowSize.y = window.getExtent().height;
+
 
         float yaw = object.transform.rotation.y;
         const glm::vec3 forwardDir(sin(yaw), 0.f, cos(yaw));
@@ -62,5 +65,4 @@ namespace VulkanEngine
         if (glm::dot(moveDir, moveDir) > std::numeric_limits<float>::epsilon())
             object.transform.translation += moveSpeed * glm::normalize(moveDir) * dt;
     }
-
 }

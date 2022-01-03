@@ -34,14 +34,6 @@ namespace VulkanEngine
 
     Model::~Model()
     {
-        vkDestroyBuffer(device.GetDevice(), vertexBuffer, nullptr);
-        vkFreeMemory(device.GetDevice(), vertexBufferMemory, nullptr);
-
-        if(hasIndexBuffer)
-        {
-            vkDestroyBuffer(device.GetDevice(), indexBuffer, nullptr);
-            vkFreeMemory(device.GetDevice(), indexBufferMemory, nullptr);
-        }
     }
 
     void Model::CreateVertexBuffer(const std::vector<Vertex>& vertices)
@@ -51,34 +43,23 @@ namespace VulkanEngine
 
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
 
-        VkBuffer stagingBuffer;
-        VkDeviceMemory stagingBufferMemory;
-        device.CreateBuffer(
-            bufferSize,
+        Buffer stagingBuffer(
+            device,
+            sizeof(vertices[0]),
+            vertexCount,
             VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-            stagingBuffer,
-            stagingBufferMemory);
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-        void* data;
-        if (vkMapMemory(device.GetDevice(), stagingBufferMemory, 0, bufferSize, 0, &data) != VK_SUCCESS)
-        {
-            throw std::runtime_error("failed to map memory");
-        }
-        memcpy(data, vertices.data(), bufferSize);
-        vkUnmapMemory(device.GetDevice(), stagingBufferMemory);
+        stagingBuffer.Map();
+        stagingBuffer.WriteToBuffer((void *)vertices.data(), bufferSize);
 
-
-        device.CreateBuffer(
-            bufferSize,
+        vertexBuffer = std::make_unique<Buffer>(device,
+            sizeof(vertices[0]),
+            vertexCount,
             VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-            vertexBuffer,
-            vertexBufferMemory);
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-        device.CopyBuffer(stagingBuffer, vertexBuffer, bufferSize);
-        vkDestroyBuffer(device.GetDevice(), stagingBuffer, nullptr);
-        vkFreeMemory(device.GetDevice(), stagingBufferMemory, nullptr);
+        device.CopyBuffer(stagingBuffer.GetBuffer(), vertexBuffer->GetBuffer(), bufferSize);
     }
 
     void Model::CreateIndexBuffer(const std::vector<uint32_t>& indices)
@@ -89,46 +70,34 @@ namespace VulkanEngine
             return;
         VkDeviceSize bufferSize = sizeof(indices[0]) * indexCount;
 
-
-        VkBuffer stagingBuffer;
-        VkDeviceMemory stagingBufferMemory;
-        device.CreateBuffer(
-            bufferSize,
+        Buffer stagingBuffer(
+            device,
+            sizeof(indices[0]),
+            indexCount,
             VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-            stagingBuffer,
-            stagingBufferMemory);
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-        void* data;
-        if (vkMapMemory(device.GetDevice(), stagingBufferMemory, 0, bufferSize, 0, &data) != VK_SUCCESS)
-        {
-            throw std::runtime_error("failed to map memory");
-        }
-        memcpy(data, indices.data(), bufferSize);
-        vkUnmapMemory(device.GetDevice(), stagingBufferMemory);
+        stagingBuffer.Map();
+        stagingBuffer.WriteToBuffer((void*)indices.data(), bufferSize);
 
-
-        device.CreateBuffer(
-            bufferSize,
+        indexBuffer = std::make_unique<Buffer>(device,
+            sizeof(indices[0]),
+            indexCount,
             VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-            indexBuffer,
-            indexBufferMemory);
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-        device.CopyBuffer(stagingBuffer, indexBuffer, bufferSize);
-        vkDestroyBuffer(device.GetDevice(), stagingBuffer, nullptr);
-        vkFreeMemory(device.GetDevice(), stagingBufferMemory, nullptr);
+        device.CopyBuffer(stagingBuffer.GetBuffer(), indexBuffer->GetBuffer(), bufferSize);
     }
 
 
     void Model::Bind(VkCommandBuffer commandBuffer)
     {
-        VkBuffer buffers[] = { vertexBuffer };
+        VkBuffer buffers[] = { vertexBuffer->GetBuffer() };
         VkDeviceSize offsets[] = { 0 };
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
         if (hasIndexBuffer)
         {
-            vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+            vkCmdBindIndexBuffer(commandBuffer, indexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
         }
     }
 
@@ -155,18 +124,13 @@ namespace VulkanEngine
 
     std::vector<VkVertexInputAttributeDescription> Model::Vertex::GetAttributeDescriptions()
     {
-        std::vector<VkVertexInputAttributeDescription> attribute(2);
-        attribute[0].binding = 0;
-        attribute[0].offset = offsetof(Vertex, position);
-        attribute[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute[0].location = 0;
+        std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
+        attributeDescriptions.push_back({ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position) });
+        attributeDescriptions.push_back({ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) });
+        attributeDescriptions.push_back({ 2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal) });
+        attributeDescriptions.push_back({ 3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCord) });
 
-        attribute[1].binding = 0;
-        attribute[1].offset = offsetof(Vertex,color);
-        attribute[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attribute[1].location = 1;
-
-        return attribute;
+        return attributeDescriptions;
     }
 
     std::unique_ptr<Model> Model::CreateModelFromFile(Device& device, const std::string& filepath)
@@ -204,37 +168,29 @@ namespace VulkanEngine
                 {
                     vertex.position =
                     {
-                        attrib.vertices[3 * index.vertex_index],
-                        attrib.vertices[3 * index.vertex_index + 1],
-                        attrib.vertices[3 * index.vertex_index + 2],
+                        attrib.vertices[index.vertex_index * 3],
+                        attrib.vertices[index.vertex_index * 3 + 1],
+                        attrib.vertices[index.vertex_index * 3 + 2],
                     };
 
-                    auto colorIndex = 3 * index.vertex_index + 2;
-                    if(colorIndex < attrib.colors.size())
+                    vertex.color =
                     {
-                        vertex.color =
-                        {
-                            attrib.colors[colorIndex - 2],
-                            attrib.colors[colorIndex - 1],
-                            attrib.colors[colorIndex],
-                        };
-                    }
-                    else
-                    {
-                        vertex.color = { 1.f,1.f,1.f };
-                    }
+                        attrib.colors[index.vertex_index * 3],
+                        attrib.colors[index.vertex_index * 3 + 1],
+                        attrib.colors[index.vertex_index * 3 + 2],
+                    };
 
                     vertex.normal =
                     {
-                        attrib.normals[3 * index.normal_index],
-                        attrib.normals[3 * index.normal_index + 1],
-                        attrib.normals[3 * index.normal_index + 2],
+                        attrib.normals[index.normal_index * 3],
+                        attrib.normals[index.normal_index * 3 + 1],
+                        attrib.normals[index.normal_index * 3 + 2],
                     };
 
                     vertex.texCord =
                     {
-                        attrib.texcoords[2 * index.texcoord_index],
-                        attrib.texcoords[2 * index.texcoord_index + 1],
+                        attrib.texcoords[index.texcoord_index * 2],
+                        attrib.texcoords[index.texcoord_index * 2 + 1],
                     };
 
                     if(uniqueVertices.count(vertex) == 0)

@@ -11,6 +11,7 @@
 #include "Renderer.hpp"
 #include "Camera.hpp"
 #include "KeyboardController.hpp"
+#include "Descriptors.hpp"
 
 namespace VulkanEngine
 {
@@ -29,8 +30,9 @@ namespace VulkanEngine
         Window window{WIDTH, HEIGHT, "VULKAN"};
         Device device{ window };
         Renderer renderer{ window, device };
-        std::vector<GameObject> gameObjects;
 
+        std::unique_ptr<DescriptorPool> globalPool{};
+        std::vector<GameObject> gameObjects;
         void LoadGameObjects();
     };
 }

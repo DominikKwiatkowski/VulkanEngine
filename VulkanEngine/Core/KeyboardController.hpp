@@ -15,10 +15,6 @@ namespace VulkanEngine
             int moveBackward = GLFW_KEY_S;
             int moveUp = GLFW_KEY_E;
             int moveDown = GLFW_KEY_Q;
-            int lookLeft = GLFW_KEY_LEFT;
-            int lookRight = GLFW_KEY_RIGHT;
-            int lookUp = GLFW_KEY_UP;
-            int lookDown = GLFW_KEY_DOWN;
         };
 
         void MoveInPlane(Window &window, float dt, GameObject& object);
@@ -26,8 +22,8 @@ namespace VulkanEngine
 
         KeyMappings keys{};
         float moveSpeed{ 3.f };
-        float lookSpeed{ 1.5f };
+        float lookSpeed{ 6.f };
 
-        glm::dvec2 OldMousePos;
+        glm::dvec2 OldWindowSize;
     };
 }

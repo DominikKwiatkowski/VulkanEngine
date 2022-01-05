@@ -12,5 +12,6 @@ namespace VulkanEngine
         Camera &camera;
         VkCommandBuffer commandBuffer;
         VkDescriptorSet globalDescriptorSet;
+        GameObject::Map &gameObjects;
     };
 }

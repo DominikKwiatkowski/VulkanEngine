@@ -22,7 +22,7 @@ namespace VulkanEngine
         RenderSystem(const RenderSystem&) = delete;
         RenderSystem& operator=(const RenderSystem&) = delete;
 
-        void RenderGameObjects(FrameInfo frameInfo, std::vector<GameObject> &gameObjects);
+        void RenderGameObjects(FrameInfo frameInfo);
     private:
         Device &device;
         std::unique_ptr<Pipeline> pipeline;

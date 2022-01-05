@@ -62,7 +62,7 @@ namespace VulkanEngine
             pipelineConfig);
     }
 
-    void RenderSystem::RenderGameObjects(FrameInfo frameInfo, std::vector<GameObject>& gameObjects)
+    void RenderSystem::RenderGameObjects(FrameInfo frameInfo)
     {
         pipeline->Bind(frameInfo.commandBuffer);
 
@@ -76,17 +76,17 @@ namespace VulkanEngine
             0,
             nullptr);
 
-        for (auto& obj : gameObjects)
+        for (auto& kv : frameInfo.gameObjects)
         {
             PushConstantData push{};
-            push.modelMatrix = obj.transform.GetTransformationMatrix();
-            push.normalMatrix = obj.transform.GetNormalTransformationMatrix();
+            push.modelMatrix = kv.second.transform.GetTransformationMatrix();
+            push.normalMatrix = kv.second.transform.GetNormalTransformationMatrix();
 
             vkCmdPushConstants(frameInfo.commandBuffer, pipelineLayout,
                                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantData),
                                &push);
-            obj.model->Bind(frameInfo.commandBuffer);
-            obj.model->Draw(frameInfo.commandBuffer);
+            kv.second.model->Bind(frameInfo.commandBuffer);
+            kv.second.model->Draw(frameInfo.commandBuffer);
         }
     }
 }

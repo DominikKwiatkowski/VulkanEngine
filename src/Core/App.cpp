@@ -100,9 +100,9 @@ namespace VulkanEngine
 
     void App::LoadGameObjects()
     {
-        std::shared_ptr flatModel = Model::CreateModelFromFile(device, "models/flat_vase.obj");
-        std::shared_ptr smoothModel = Model::CreateModelFromFile(device, "models/smooth_vase.obj");
-        std::shared_ptr floorModel = Model::CreateModelFromFile(device, "models/quad.obj");
+        std::shared_ptr flatModel = Model::CreateModelFromFile(device, "../models/flat_vase.obj");
+        std::shared_ptr smoothModel = Model::CreateModelFromFile(device, "../models/smooth_vase.obj");
+        std::shared_ptr floorModel = Model::CreateModelFromFile(device, "../models/quad.obj");
 
         auto flatVase = GameObject::CreateGameObject();
         flatVase.model = flatModel;

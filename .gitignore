@@ -397,5 +397,8 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-#shader compiled
+# shader compiled
 *.spv
+
+# cmake build
+build/

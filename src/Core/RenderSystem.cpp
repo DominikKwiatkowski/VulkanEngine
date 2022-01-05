@@ -57,8 +57,8 @@ namespace VulkanEngine
         pipelineConfig.pipelineLayout = pipelineLayout;
         pipeline = std::make_unique<Pipeline>(
             device,
-            "Shaders/vert_shader.vert.spv",
-            "Shaders/frag_shader.frag.spv",
+            "../Shaders/vert_shader.vert.spv",
+            "../Shaders/frag_shader.frag.spv",
             pipelineConfig);
     }
 

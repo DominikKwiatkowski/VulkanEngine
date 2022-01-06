@@ -1,6 +1,7 @@
 #pragma once
 #include "App.hpp"
-#include "RenderSystem.hpp"
+#include "RenderSystems/RenderSystem.hpp"
+#include "RenderSystems/PointLightSystem.hpp"
 #include <array>
 #include <chrono>
 #include <stdexcept>
@@ -10,7 +11,8 @@ namespace VulkanEngine
 {
     struct GlobalUbo
     {
-        glm::mat4 projectionView{1.f};
+        glm::mat4 projectionMatrix{1.f};
+        glm::mat4 viewMatrix{ 1.f };
         // intensity is w light color component
         glm::vec4 ambientLight{ 1.f,1.f,1.f,0.02f };
         glm::vec4 lightPosition{-1.f};
@@ -59,6 +61,7 @@ namespace VulkanEngine
 
         Camera camera{};
         RenderSystem renderSystem{device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout()};
+        PointLightSystem pointLightSystem{ device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout() };
 
         auto cameraObject = GameObject::CreateGameObject();
         cameraObject.transform.translation.z = -2.5f;
@@ -85,11 +88,13 @@ namespace VulkanEngine
 
                 GlobalUbo ubo{};
 
-                ubo.projectionView = camera.GetProjectionMatrix() * camera.GetViewMatrix();
+                ubo.projectionMatrix = camera.GetProjectionMatrix();
+                ubo.viewMatrix = camera.GetViewMatrix();
                 uboBuffers[frameIndex]->WriteToBuffer(&ubo);
 
                 renderer.BeginSwapChainRenderPass(commandBuffer);
                 renderSystem.RenderGameObjects(frameInfo);
+                pointLightSystem.Render(frameInfo);
                 renderer.EndSwapChainRenderPass(commandBuffer);
                 renderer.EndFrame();
             }

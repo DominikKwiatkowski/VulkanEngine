@@ -2,8 +2,19 @@ include(./.env.cmake OPTIONAL RESULT_VARIABLE LOCAL_ENV)
 message(STATUS "Local .env.cmake: ${LOCAL_ENV}")
  
 cmake_minimum_required(VERSION 3.11.0)
- 
+
 set(NAME VulkanEngine)
+
+MACRO(SUBDIRLIST result curdir)
+  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+  SET(dirlist "")
+  FOREACH(child ${children})
+    IF(IS_DIRECTORY ${curdir}/${child})
+      LIST(APPEND dirlist ${curdir}/${child})
+    ENDIF()
+  ENDFOREACH()
+  SET(${result} ${dirlist})
+ENDMACRO()
  
 message(STATUS "using ${CMAKE_GENERATOR}")
 if (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
@@ -81,7 +92,8 @@ if (WIN32)
       ${MINGW_PATH}/lib
     )
   endif()
- 
+	
+message(STATUS ${SRCSUBDIRS})
   target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/src
     ${Vulkan_INCLUDE_DIRS}
@@ -137,7 +149,9 @@ foreach(GLSL ${GLSL_SOURCE_FILES})
   list(APPEND SPIRV_BINARY_FILES ${SPIRV})
 endforeach(GLSL)
  
+ 
 add_custom_target(
     Shaders
     DEPENDS ${SPIRV_BINARY_FILES}
+	SOURCES ${GLSL_SOURCE_FILES}
 )

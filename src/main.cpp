@@ -6,7 +6,7 @@
 #include <cstdlib>
 
 
-#include "Core/App.hpp"
+#include "App.hpp"
 
 int main()
 {

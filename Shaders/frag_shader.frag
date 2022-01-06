@@ -12,7 +12,8 @@ layout(push_constant) uniform Push{
 }push;
 
 layout(set = 0, binding = 0) uniform GlobalUbo {
-  mat4 projectionViewMatrix;
+  mat4 projectionMatrix;
+  mat4 viewMatrix;
   vec4 ambientLight;
   vec4 lightPosition;
   vec4 lightColor;

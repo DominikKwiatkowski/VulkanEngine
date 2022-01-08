@@ -11,6 +11,9 @@
 
 namespace std
 {
+    /// <summary>
+    /// Helper hashing function.
+    /// </summary>
     template<>
     struct hash<VulkanEngine::Model::Vertex>
     {
@@ -38,11 +41,12 @@ namespace VulkanEngine
 
     void Model::CreateVertexBuffer(const std::vector<Vertex>& vertices)
     {
+        // Calculate vertex data
         vertexCount = static_cast<uint32_t>(vertices.size());
         assert(vertexCount >= 3);
-
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
 
+        // Create staging buffer.
         Buffer stagingBuffer(
             device,
             sizeof(vertices[0]),
@@ -53,12 +57,14 @@ namespace VulkanEngine
         stagingBuffer.Map();
         stagingBuffer.WriteToBuffer((void *)vertices.data(), bufferSize);
 
+        // Create vertex buffer.
         vertexBuffer = std::make_unique<Buffer>(device,
             sizeof(vertices[0]),
             vertexCount,
             VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
+        // Copy staging to vertex.
         device.CopyBuffer(stagingBuffer.GetBuffer(), vertexBuffer->GetBuffer(), bufferSize);
     }
 
@@ -66,10 +72,14 @@ namespace VulkanEngine
     {
         indexCount = static_cast<uint32_t>(indices.size());
         hasIndexBuffer = indexCount > 0;
+
+        // If no index buffer provided, return
         if (!hasIndexBuffer)
             return;
+
         VkDeviceSize bufferSize = sizeof(indices[0]) * indexCount;
 
+        // Create staging buffer
         Buffer stagingBuffer(
             device,
             sizeof(indices[0]),
@@ -80,12 +90,14 @@ namespace VulkanEngine
         stagingBuffer.Map();
         stagingBuffer.WriteToBuffer((void*)indices.data(), bufferSize);
 
+        // Create index buffer
         indexBuffer = std::make_unique<Buffer>(device,
             sizeof(indices[0]),
             indexCount,
             VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
+        // Copy staging buffer to index
         device.CopyBuffer(stagingBuffer.GetBuffer(), indexBuffer->GetBuffer(), bufferSize);
     }
 
@@ -157,13 +169,19 @@ namespace VulkanEngine
         vertices.clear();
         indices.clear();
 
+        // Don't want to duplicate vertices due to performance issue,
+        // so store only unique vertices and write proper index
         std::unordered_map<Vertex, uint32_t> uniqueVertices{};
+
+        // For each shape in file, load it.
         for(auto &shape : shapes)
         {
+            // For each index in shape index
             for(auto &index : shape.mesh.indices)
             {
                 Vertex vertex{};
 
+                // Read vertex data
                 if(index.vertex_index >= 0)
                 {
                     vertex.position =

@@ -78,11 +78,11 @@ namespace VulkanEngine
         pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
         pipelineInfo.pDepthStencilState = &configInfo.depthStencilInfo;
         pipelineInfo.pDynamicState = &configInfo.dynamicStateInfo;
-
         pipelineInfo.layout = configInfo.pipelineLayout;
         pipelineInfo.renderPass = configInfo.renderPass;
         pipelineInfo.subpass = configInfo.subpass;
 
+        // No base pipeline
         pipelineInfo.basePipelineIndex = -1;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
@@ -122,11 +122,12 @@ namespace VulkanEngine
     void Pipeline::DefaultPipelineConfigInfo(
         PipelineConfigInfo& configInfo)
     {
+        // Input assembly info
         configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         configInfo.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
 
-
+        // Raster info
         configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         configInfo.rasterizationInfo.depthClampEnable = VK_FALSE;
         configInfo.rasterizationInfo.rasterizerDiscardEnable = VK_FALSE;
@@ -139,12 +140,14 @@ namespace VulkanEngine
         configInfo.rasterizationInfo.depthBiasClamp = 0.0f; // Optional
         configInfo.rasterizationInfo.depthBiasSlopeFactor = 0.0f; // Optional
 
+        // Viewport info
         configInfo.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         configInfo.viewportInfo.viewportCount = 1;
         configInfo.viewportInfo.pViewports = nullptr;
         configInfo.viewportInfo.scissorCount = 1;
         configInfo.viewportInfo.pScissors = nullptr;
 
+        // Multisample info
         configInfo.multisampleInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
         configInfo.multisampleInfo.sampleShadingEnable = VK_FALSE;
         configInfo.multisampleInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
@@ -153,6 +156,7 @@ namespace VulkanEngine
         configInfo.multisampleInfo.alphaToCoverageEnable = VK_FALSE; // Optional
         configInfo.multisampleInfo.alphaToOneEnable = VK_FALSE; // Optional
 
+        // Color blend attachment info
         configInfo.colorBlendAttachment.colorWriteMask =
             VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
             VK_COLOR_COMPONENT_A_BIT;
@@ -164,6 +168,7 @@ namespace VulkanEngine
         configInfo.colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
         configInfo.colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD; // Optional
 
+        // Color blend infp
         configInfo.colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         configInfo.colorBlendInfo.logicOpEnable = VK_FALSE;
         configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY; // Optional
@@ -174,6 +179,7 @@ namespace VulkanEngine
         configInfo.colorBlendInfo.blendConstants[2] = 0.0f; // Optional
         configInfo.colorBlendInfo.blendConstants[3] = 0.0f; // Optional
 
+        // Depth stencil info
         configInfo.depthStencilInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
         configInfo.depthStencilInfo.depthTestEnable = VK_TRUE;
         configInfo.depthStencilInfo.depthWriteEnable = VK_TRUE;
@@ -185,12 +191,14 @@ namespace VulkanEngine
         configInfo.depthStencilInfo.front = {}; // Optional
         configInfo.depthStencilInfo.back = {}; // Optional
 
+        // Dynamic state info
         configInfo.dynamicStatesEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
         configInfo.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
         configInfo.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(configInfo.dynamicStatesEnables.size());
         configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStatesEnables.data();
         configInfo.dynamicStateInfo.flags = 0;
 
+        // Vertex input info
         configInfo.attributeDescriptions = Model::Vertex::GetAttributeDescriptions();
         configInfo.bindingDescriptions = Model::Vertex::GetBindingDescription();
     }

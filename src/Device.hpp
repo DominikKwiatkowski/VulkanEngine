@@ -39,11 +39,11 @@ namespace VulkanEngine {
         Device(Device&&) = delete;
         Device& operator=(Device&&) = delete;
 
-        VkCommandPool GetCommandPool() { return commandPool; }
-        VkDevice GetDevice() { return device; }
-        VkSurfaceKHR Surface() { return surface; }
-        VkQueue GraphicsQueue() { return graphicsQueue; }
-        VkQueue PresentQueue() { return presentQueue; }
+        VkCommandPool GetCommandPool() const { return commandPool; }
+        VkDevice GetDevice() const { return device; }
+        VkSurfaceKHR Surface() const { return surface; }
+        VkQueue GraphicsQueue() const { return graphicsQueue; }
+        VkQueue PresentQueue() const { return presentQueue; }
 
         SwapChainSupportDetails GetSwapChainSupport() { return QuerySwapChainSupport(physicalDevice); }
         uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);

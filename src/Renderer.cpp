@@ -11,15 +11,15 @@ namespace VulkanEngine
         device(device)
     {
         RecreateSwapChain();
-        CreateCommandBuffer();
+        CreateCommandBuffers();
     }
 
     Renderer::~Renderer()
     {
-        FreeCommandBuffer();
+        FreeCommandBuffers();
     }
 
-    void Renderer::CreateCommandBuffer()
+    void Renderer::CreateCommandBuffers()
     {
         commandBuffers.resize(SwapChain::MAX_FRAMES_IN_FLIGHT);
 
@@ -35,7 +35,7 @@ namespace VulkanEngine
         }
     }
 
-    void Renderer::FreeCommandBuffer()
+    void Renderer::FreeCommandBuffers()
     {
         if (commandBuffers.size() > 0)
             vkFreeCommandBuffers(
@@ -69,7 +69,6 @@ namespace VulkanEngine
         {
             swapChain = std::make_unique<SwapChain>(device, extent);
         }
-        // CreatePipeline();
     }
 
     VkCommandBuffer Renderer::BeginFrame()
@@ -105,6 +104,7 @@ namespace VulkanEngine
 
     void Renderer::EndFrame()
     {
+        // End command buffer
         assert(isFrameStarted);
         auto commandBuffer = GetCurrentCommandBuffer();
         if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS)
@@ -112,11 +112,13 @@ namespace VulkanEngine
             throw std::runtime_error("failed to stop recording command buffer");
         }
 
-
-
+        // Submit command buffer.
         auto result = swapChain->SubmitCommandBuffers(&commandBuffer, &currentImageIndex);
+
+        // Check if window was resized
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || window.WasWindowResized())
         {
+            // Adjust swapChain to new size
             window.ResetWindowResizedFlag();
             RecreateSwapChain();
         }
@@ -130,6 +132,7 @@ namespace VulkanEngine
         assert(isFrameStarted);
         assert(commandBuffer == GetCurrentCommandBuffer());
 
+        // Create render pass
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         renderPassInfo.renderPass = swapChain->GetRenderPass();
@@ -138,6 +141,7 @@ namespace VulkanEngine
         renderPassInfo.renderArea.offset = { 0,0 };
         renderPassInfo.renderArea.extent = swapChain->GetSwapChainExtent();
 
+        // Create clear information
         std::array<VkClearValue, 2> clearValues{};
         clearValues[0].color = { 0.098f, 0.415f, 0.721f,1.0f };
         clearValues[1].depthStencil = { 1.0f,0 };
@@ -146,6 +150,7 @@ namespace VulkanEngine
 
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
+        // Set viewport and scissor
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;

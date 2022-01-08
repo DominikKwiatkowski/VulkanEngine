@@ -141,27 +141,26 @@ namespace VulkanEngine
     {
     }
 
-    DescriptorWriter& DescriptorWriter::WriteBuffer(uint32_t binding, VkDescriptorBufferInfo* bufferInfo)
+    DescriptorWriter& DescriptorWriter::WriteBuffer(uint32_t binding, VkDescriptorBufferInfo* pBufferInfo)
     {
         assert(setLayout.bindings.count(binding) == 1);
 
         const auto& bindingDescription = setLayout.bindings[binding];
 
-        assert(
-            bindingDescription.descriptorCount == 1);
+        assert(bindingDescription.descriptorCount == 1);
 
         VkWriteDescriptorSet write{};
         write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.descriptorType = bindingDescription.descriptorType;
         write.dstBinding = binding;
-        write.pBufferInfo = bufferInfo;
+        write.pBufferInfo = pBufferInfo;
         write.descriptorCount = 1;
 
         writes.push_back(write);
         return *this;
     }
 
-    DescriptorWriter& DescriptorWriter::WriteImage(uint32_t binding, VkDescriptorImageInfo* imageInfo)
+    DescriptorWriter& DescriptorWriter::WriteImage(uint32_t binding, VkDescriptorImageInfo* pImageInfo)
     {
         assert(setLayout.bindings.count(binding) == 1);
 
@@ -173,7 +172,7 @@ namespace VulkanEngine
         write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.descriptorType = bindingDescription.descriptorType;
         write.dstBinding = binding;
-        write.pImageInfo = imageInfo;
+        write.pImageInfo = pImageInfo;
         write.descriptorCount = 1;
 
         writes.push_back(write);

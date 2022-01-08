@@ -2,11 +2,12 @@
 #include "Window.hpp"
 
 #include <stdexcept>
+#include <utility>
 
 namespace VulkanEngine
 {
     Window::Window(int width, int height, std::string name)
-        :width(width), height(height),windowName(name)
+        :windowName(std::move(name)), width(width),height(height)
     {
         InitWindow();
     }
@@ -19,11 +20,17 @@ namespace VulkanEngine
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
         pWindow = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
+
+        // Set user pointer to access this data inside callbacks
         glfwSetWindowUserPointer(pWindow, this);
+
+        // Set callbacks
         glfwSetFramebufferSizeCallback(pWindow, FramebufferResizeCallback);
         glfwSetCursorPosCallback(pWindow, OnMauseMoveCallback);
         glfwSetWindowFocusCallback(pWindow, OnFocusCallback);
         glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+        // Fix start mouse pos
         CenterMousePos();
         mousePos.x = width / 2.0;
         mousePos.y = height / 2.0;

@@ -5,6 +5,9 @@
 
 namespace VulkanEngine
 {
+    /// <summary>
+    /// Struct to wrap all information about frame.
+    /// </summary>
     struct FrameInfo
     {
         int frameIndex;

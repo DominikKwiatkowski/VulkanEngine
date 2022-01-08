@@ -14,26 +14,34 @@ namespace VulkanEngine
         Window(int width, int height, std::string name);
         ~Window();
 
-        Window(const Window &) = delete;
+        Window(const Window&) = delete;
         Window& operator=(const Window&) = delete;
 
         bool ShouldClose()
         {
             return glfwWindowShouldClose(pWindow);
         }
+
         VkExtent2D getExtent()
         {
-            return { static_cast<uint32_t>(width), static_cast<uint32_t>(height) };
+            return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
         }
+
         bool WasWindowResized()
         {
             return framebufferResized;
         }
+
         void ResetWindowResizedFlag()
         {
             framebufferResized = false;
         }
 
+        /// <summary>
+        /// Create window surface
+        /// </summary>
+        /// <param name="instance"> Instance on which surface will be</param>
+        /// <param name="surface"> pointer to surface</param>
         void CreateWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
 
         GLFWwindow* GetGLFWWindow()
@@ -46,12 +54,18 @@ namespace VulkanEngine
             return mousePos;
         }
 
+        /// <summary>
+        /// Move cursor to window center
+        /// </summary>
         void CenterMousePos();
+
     private:
+        // Base glfw callbacks
         static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
         static void OnMauseMoveCallback(GLFWwindow* window, double xpos, double ypos);
         static void OnFocusCallback(GLFWwindow* window, int focus);
-        GLFWwindow *pWindow;
+
+        GLFWwindow* pWindow;
         std::string windowName;
 
         int width;

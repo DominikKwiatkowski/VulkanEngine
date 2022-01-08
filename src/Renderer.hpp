@@ -12,9 +12,17 @@
 
 namespace VulkanEngine
 {
+    /// <summary>
+    /// Object to store and menage all render data such as command buffer, swap chain and render pass
+    /// </summary>
     class Renderer
     {
     public:
+        /// <summary>
+        /// Create swap chain and command buffer pool for new renderer
+        /// </summary>
+        /// <param name="window"> current window</param>
+        /// <param name="device"> current device</param>
         Renderer(Window &window, Device &device);
         ~Renderer();
         Renderer(const Renderer&) = delete;
@@ -48,14 +56,43 @@ namespace VulkanEngine
             return currentFrameIndex;
         }
 
+        /// <summary>
+        /// Start new frame.
+        /// </summary>
+        /// <returns> New frame command buffer</returns>
         VkCommandBuffer BeginFrame();
+
+        /// <summary>
+        /// End current frame.
+        /// </summary>
         void EndFrame();
+
+        /// <summary>
+        /// Begin render pass for given command buffer
+        /// </summary>
+        /// <param name="commandBuffer"> Current command buffer</param>
         void BeginSwapChainRenderPass(VkCommandBuffer commandBuffer);
+
+        /// <summary>
+        /// End swap chain for current render pass
+        /// </summary>
+        /// <param name="commandBuffer"> Current command buffer</param>
         void EndSwapChainRenderPass(VkCommandBuffer commandBuffer);
 
     private:
-        void CreateCommandBuffer();
-        void FreeCommandBuffer();
+        /// <summary>
+        /// Create new command buffer pool
+        /// </summary>
+        void CreateCommandBuffers();
+
+        /// <summary>
+        /// Delete current command buffer pool
+        /// </summary>
+        void FreeCommandBuffers();
+
+        /// <summary>
+        /// Recreate swap chain. Needed when resized.
+        /// </summary>
         void RecreateSwapChain();
 
         Window& window;

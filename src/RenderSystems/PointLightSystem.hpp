@@ -14,6 +14,9 @@
 
 namespace VulkanEngine
 {
+    /// <summary>
+    /// System to display light. Point light data is stored in global UBO
+    /// </summary>
     class PointLightSystem
     {
     public:
@@ -22,6 +25,10 @@ namespace VulkanEngine
         PointLightSystem(const PointLightSystem&) = delete;
         PointLightSystem& operator=(const PointLightSystem&) = delete;
 
+        /// <summary>
+        /// Render point light
+        /// </summary>
+        /// <param name="frameInfo"> Current frame info</param>
         void Render(FrameInfo frameInfo);
     private:
         Device &device;

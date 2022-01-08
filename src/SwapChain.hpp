@@ -10,9 +10,10 @@
 #include <string>
 #include <vector>
 
-namespace VulkanEngine {
-
-    class SwapChain {
+namespace VulkanEngine
+{
+    class SwapChain
+    {
     public:
         static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
@@ -20,21 +21,56 @@ namespace VulkanEngine {
         SwapChain(Device& deviceRef, VkExtent2D windowExtent, std::shared_ptr<SwapChain> previous);
         ~SwapChain();
 
+        // Remove copy operators to prevent double free
         SwapChain(const SwapChain&) = delete;
-        SwapChain &operator=(const SwapChain&) = delete;
+        SwapChain& operator=(const SwapChain&) = delete;
 
-        VkFramebuffer GetFrameBuffer(int index) { return swapChainFramebuffers[index]; }
-        VkRenderPass GetRenderPass() { return renderPass; }
-        VkImageView GetImageView(int index) { return swapChainImageViews[index]; }
-        size_t ImageCount() { return swapChainImages.size(); }
-        VkFormat GetSwapChainImageFormat() { return swapChainImageFormat; }
-        VkExtent2D GetSwapChainExtent() { return swapChainExtent; }
-        uint32_t Width() { return swapChainExtent.width; }
-        uint32_t Height() { return swapChainExtent.height; }
+        VkFramebuffer GetFrameBuffer(int index)
+        {
+            return swapChainFramebuffers[index];
+        }
 
-        float ExtentAspectRatio() {
+        VkRenderPass GetRenderPass()
+        {
+            return renderPass;
+        }
+
+        VkImageView GetImageView(int index)
+        {
+            return swapChainImageViews[index];
+        }
+
+        size_t ImageCount()
+        {
+            return swapChainImages.size();
+        }
+
+        VkFormat GetSwapChainImageFormat()
+        {
+            return swapChainImageFormat;
+        }
+
+        VkExtent2D GetSwapChainExtent()
+        {
+            return swapChainExtent;
+        }
+
+        uint32_t Width()
+        {
+            return swapChainExtent.width;
+        }
+
+        uint32_t Height()
+        {
+            return swapChainExtent.height;
+        }
+
+        float ExtentAspectRatio()
+        {
             return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height);
         }
+
+
         VkFormat FindDepthFormat();
 
         VkResult AcquireNextImage(uint32_t* imageIndex);
@@ -87,5 +123,4 @@ namespace VulkanEngine {
         std::vector<VkFence> imagesInFlight;
         size_t currentFrame = 0;
     };
-
 }

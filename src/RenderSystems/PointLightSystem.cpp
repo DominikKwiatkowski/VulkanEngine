@@ -7,15 +7,10 @@
 namespace VulkanEngine
 {
     PointLightSystem::PointLightSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout):
-        device(device)
+        RenderSystem(device)
     {
         CreatePipelineLayout(globalSetLayout);
         CreatePipeline(renderPass);
-    }
-
-    PointLightSystem::~PointLightSystem()
-    {
-        vkDestroyPipelineLayout(device.GetDevice(), pipelineLayout, nullptr);
     }
 
 

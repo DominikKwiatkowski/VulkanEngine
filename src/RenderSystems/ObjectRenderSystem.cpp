@@ -7,17 +7,11 @@
 namespace VulkanEngine
 {
     ObjectRenderSystem::ObjectRenderSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout):
-        device(device)
+        RenderSystem(device)
     {
         CreatePipelineLayout(globalSetLayout);
         CreatePipeline(renderPass);
     }
-
-    ObjectRenderSystem::~ObjectRenderSystem()
-    {
-        vkDestroyPipelineLayout(device.GetDevice(), pipelineLayout, nullptr);
-    }
-
 
     void ObjectRenderSystem::CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout)
     {
@@ -56,7 +50,7 @@ namespace VulkanEngine
             pipelineConfig);
     }
 
-    void ObjectRenderSystem::RenderGameObjects(FrameInfo frameInfo)
+    void ObjectRenderSystem::Render(FrameInfo frameInfo)
     {
         pipeline->Bind(frameInfo.commandBuffer);
 

@@ -11,23 +11,18 @@
 #include "GameObject.hpp"
 #include "Camera.hpp"
 #include "FrameInfo.hpp"
+#include "RenderSystem.hpp"
 
 namespace VulkanEngine
 {
-    class ObjectRenderSystem
+    class ObjectRenderSystem : RenderSystem
     {
     public:
         ObjectRenderSystem(Device &device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
-        ~ObjectRenderSystem();
-        ObjectRenderSystem(const ObjectRenderSystem&) = delete;
-        ObjectRenderSystem& operator=(const ObjectRenderSystem&) = delete;
 
-        void RenderGameObjects(FrameInfo frameInfo);
+        void Render(FrameInfo frameInfo) override;
+
     private:
-        Device &device;
-        std::unique_ptr<Pipeline> pipeline;
-        VkPipelineLayout pipelineLayout;
-
         void CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout);
         void CreatePipeline(VkRenderPass renderPass);
 

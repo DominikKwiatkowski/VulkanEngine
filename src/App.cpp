@@ -94,7 +94,7 @@ namespace VulkanEngine
                 uboBuffers[frameIndex]->WriteToBuffer(&ubo);
 
                 renderer.BeginSwapChainRenderPass(commandBuffer);
-                renderSystem.RenderGameObjects(frameInfo);
+                renderSystem.Render(frameInfo);
                 pointLightSystem.Render(frameInfo);
                 renderer.EndSwapChainRenderPass(commandBuffer);
                 renderer.EndFrame();

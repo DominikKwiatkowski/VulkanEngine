@@ -14,13 +14,13 @@
 
 namespace VulkanEngine
 {
-    class RenderSystem
+    class ObjectRenderSystem
     {
     public:
-        RenderSystem(Device &device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
-        ~RenderSystem();
-        RenderSystem(const RenderSystem&) = delete;
-        RenderSystem& operator=(const RenderSystem&) = delete;
+        ObjectRenderSystem(Device &device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
+        ~ObjectRenderSystem();
+        ObjectRenderSystem(const ObjectRenderSystem&) = delete;
+        ObjectRenderSystem& operator=(const ObjectRenderSystem&) = delete;
 
         void RenderGameObjects(FrameInfo frameInfo);
     private:

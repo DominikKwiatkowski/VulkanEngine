@@ -42,8 +42,10 @@ namespace VulkanEngine
         Pipeline::DefaultPipelineConfigInfo(
             pipelineConfig);
 
+        // No vertex input, data pass via uniform buffer.
         pipelineConfig.attributeDescriptions.clear();
         pipelineConfig.bindingDescriptions.clear();
+
         pipelineConfig.renderPass = renderPass;
         pipelineConfig.pipelineLayout = pipelineLayout;
         pipeline = std::make_unique<Pipeline>(

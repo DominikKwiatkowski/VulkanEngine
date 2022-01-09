@@ -1,6 +1,6 @@
 #pragma once
 #include "App.hpp"
-#include "RenderSystems/RenderSystem.hpp"
+#include "RenderSystems/ObjectRenderSystem.hpp"
 #include "RenderSystems/PointLightSystem.hpp"
 #include <array>
 #include <chrono>
@@ -61,7 +61,7 @@ namespace VulkanEngine
         }
 
         Camera camera{};
-        RenderSystem renderSystem{device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout()};
+        ObjectRenderSystem renderSystem{device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout()};
         PointLightSystem pointLightSystem{ device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout() };
 
         auto cameraObject = GameObject::CreateGameObject();

@@ -1,25 +1,25 @@
 #pragma once
-#include "RenderSystem.hpp"
+#include "ObjectRenderSystem.hpp"
 
 #include <array>
 #include <stdexcept>
 
 namespace VulkanEngine
 {
-    RenderSystem::RenderSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout):
+    ObjectRenderSystem::ObjectRenderSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout):
         device(device)
     {
         CreatePipelineLayout(globalSetLayout);
         CreatePipeline(renderPass);
     }
 
-    RenderSystem::~RenderSystem()
+    ObjectRenderSystem::~ObjectRenderSystem()
     {
         vkDestroyPipelineLayout(device.GetDevice(), pipelineLayout, nullptr);
     }
 
 
-    void RenderSystem::CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout)
+    void ObjectRenderSystem::CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout)
     {
         VkPushConstantRange pushConstantRange{};
         pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -41,7 +41,7 @@ namespace VulkanEngine
         }
     }
 
-    void RenderSystem::CreatePipeline(VkRenderPass renderPass)
+    void ObjectRenderSystem::CreatePipeline(VkRenderPass renderPass)
     {
         PipelineConfigInfo pipelineConfig{};
         Pipeline::DefaultPipelineConfigInfo(
@@ -56,7 +56,7 @@ namespace VulkanEngine
             pipelineConfig);
     }
 
-    void RenderSystem::RenderGameObjects(FrameInfo frameInfo)
+    void ObjectRenderSystem::RenderGameObjects(FrameInfo frameInfo)
     {
         pipeline->Bind(frameInfo.commandBuffer);
 

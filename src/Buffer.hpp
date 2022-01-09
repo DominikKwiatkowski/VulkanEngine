@@ -2,14 +2,14 @@
 #include "Device.hpp"
 
 
-namespace VulkanEngine {
-
+namespace VulkanEngine
+{
     /// <summary>
     /// Class representing buffer. It wraps vulkan buffer methods and prevents memory leaks.
     /// </summary>
-    class Buffer {
+    class Buffer
+    {
     public:
-
         /// <summary>
         /// Store data, calculate size and alignment, create buffer
         /// </summary>
@@ -171,5 +171,4 @@ namespace VulkanEngine {
         VkBufferUsageFlags usageFlags;
         VkMemoryPropertyFlags memoryPropertyFlags;
     };
-
 }

@@ -57,8 +57,8 @@ namespace VulkanEngine
         shaderStages[1].flags = 0;
         shaderStages[1].pSpecializationInfo = nullptr;
 
-        auto &bindingDescription = configInfo.bindingDescriptions;
-        auto &attributeDescription = configInfo.attributeDescriptions;
+        auto& bindingDescription = configInfo.bindingDescriptions;
+        auto& attributeDescription = configInfo.attributeDescriptions;
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescription.size());
@@ -192,7 +192,7 @@ namespace VulkanEngine
         configInfo.depthStencilInfo.back = {}; // Optional
 
         // Dynamic state info
-        configInfo.dynamicStatesEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+        configInfo.dynamicStatesEnables = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
         configInfo.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
         configInfo.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(configInfo.dynamicStatesEnables.size());
         configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStatesEnables.data();

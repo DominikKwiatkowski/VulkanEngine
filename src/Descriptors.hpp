@@ -10,11 +10,12 @@ namespace VulkanEngine
     class DescriptorSetLayout
     {
     public:
-
         class Builder
         {
         public:
-            Builder(Device& device) : device(device) {}
+            Builder(Device& device) : device(device)
+            {
+            }
 
             /// <summary>
             /// Add binding point to descriptor layout.
@@ -69,11 +70,12 @@ namespace VulkanEngine
     class DescriptorPool
     {
     public:
-
         class Builder
         {
         public:
-            Builder(Device& device) : device{ device } {}
+            Builder(Device& device) : device{device}
+            {
+            }
 
             /// <summary>
             ///
@@ -194,5 +196,4 @@ namespace VulkanEngine
         DescriptorPool& pool;
         std::vector<VkWriteDescriptorSet> writes;
     };
-
 }

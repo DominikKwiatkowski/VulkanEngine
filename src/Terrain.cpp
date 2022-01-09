@@ -1,6 +1,7 @@
 #pragma once
 #include "Terrain.hpp"
 #include <glm/gtc/noise.hpp>
+
 namespace VulkanEngine
 {
     // Function to generate a terrain. Terrain heightmap is generated using Perlin noise.
@@ -38,11 +39,13 @@ namespace VulkanEngine
                 // Calculate normals using the surrounding vertices.
                 if (i > 0)
                 {
-                    vertex.normal += glm::normalize(vertex.position - modelData.vertices[(i - 1) * points + j].position);
+                    vertex.normal +=
+                        glm::normalize(vertex.position - modelData.vertices[(i - 1) * points + j].position);
                 }
                 if (i < points - 1)
                 {
-                    vertex.normal += glm::normalize(vertex.position - modelData.vertices[(i + 1) * points + j].position);
+                    vertex.normal +=
+                        glm::normalize(vertex.position - modelData.vertices[(i + 1) * points + j].position);
                 }
                 if (j > 0)
                 {

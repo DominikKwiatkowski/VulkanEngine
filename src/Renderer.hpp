@@ -23,7 +23,7 @@ namespace VulkanEngine
         /// </summary>
         /// <param name="window"> current window</param>
         /// <param name="device"> current device</param>
-        Renderer(Window &window, Device &device);
+        Renderer(Window& window, Device& device);
         ~Renderer();
         Renderer(const Renderer&) = delete;
         Renderer& operator=(const Renderer&) = delete;
@@ -97,7 +97,7 @@ namespace VulkanEngine
 
         Window& window;
         Device& device;
-        std::unique_ptr < SwapChain> swapChain;
+        std::unique_ptr<SwapChain> swapChain;
         std::vector<VkCommandBuffer> commandBuffers;
 
         uint32_t currentImageIndex = 0;

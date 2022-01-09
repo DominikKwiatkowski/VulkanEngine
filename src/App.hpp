@@ -49,7 +49,7 @@ namespace VulkanEngine
 
         /// <summary>
         /// Load all game objects.
-        /// TODO: we should have object pool per render system,
+        /// TODO: we may have object pool per render system,
         ///     probably it is good idea to create some struct,
         ///     which combine this 2 things
         /// </summary>

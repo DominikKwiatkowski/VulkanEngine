@@ -6,7 +6,8 @@
 
 namespace VulkanEngine
 {
-    ObjectRenderSystem::ObjectRenderSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout):
+    ObjectRenderSystem::ObjectRenderSystem(Device& device, VkRenderPass renderPass,
+                                           VkDescriptorSetLayout globalSetLayout):
         RenderSystem(device)
     {
         CreatePipelineLayout(globalSetLayout);

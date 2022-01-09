@@ -5,6 +5,7 @@
 #include <memory>
 #include <unordered_map>
 #include <glm/gtc/matrix_transform.hpp>
+
 namespace VulkanEngine
 {
     struct TransformComponent
@@ -49,7 +50,9 @@ namespace VulkanEngine
         TransformComponent transform{};
 
     private:
-        GameObject(id_t id) : id(id){}
+        GameObject(id_t id) : id(id)
+        {
+        }
 
         id_t id;
     };

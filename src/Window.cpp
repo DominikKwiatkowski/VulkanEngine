@@ -7,7 +7,7 @@
 namespace VulkanEngine
 {
     Window::Window(int width, int height, std::string name)
-        :windowName(std::move(name)), width(width),height(height)
+        : windowName(std::move(name)), width(width), height(height)
     {
         InitWindow();
     }
@@ -69,12 +69,12 @@ namespace VulkanEngine
     void Window::OnMauseMoveCallback(GLFWwindow* window, double xpos, double ypos)
     {
         auto pWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-        if(!pWindow->focusedRegained && pWindow->focused)
+        if (!pWindow->focusedRegained && pWindow->focused)
         {
             pWindow->mousePos.x = xpos;
             pWindow->mousePos.y = ypos;
         }
-        else if(pWindow->focusedRegained)
+        else if (pWindow->focusedRegained)
         {
             pWindow->focusedRegained = false;
         }
@@ -83,7 +83,7 @@ namespace VulkanEngine
     void Window::OnFocusCallback(GLFWwindow* window, int focus)
     {
         auto pWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-        if(focus)
+        if (focus)
         {
             pWindow->focusedRegained = true;
             pWindow->focused = true;
@@ -93,6 +93,4 @@ namespace VulkanEngine
             pWindow->focused = false;
         }
     }
-
-
 }

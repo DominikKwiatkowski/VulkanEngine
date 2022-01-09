@@ -21,7 +21,7 @@ namespace VulkanEngine
     class PointLightSystem : public RenderSystem
     {
     public:
-        PointLightSystem(Device &device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
+        PointLightSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
 
         /// <summary>
         /// Render point light

@@ -6,7 +6,7 @@
 
 namespace VulkanEngine
 {
-    Renderer::Renderer(Window &window, Device &device):
+    Renderer::Renderer(Window& window, Device& device):
         window(window),
         device(device)
     {
@@ -138,13 +138,13 @@ namespace VulkanEngine
         renderPassInfo.renderPass = swapChain->GetRenderPass();
         renderPassInfo.framebuffer = swapChain->GetFrameBuffer(currentImageIndex);
 
-        renderPassInfo.renderArea.offset = { 0,0 };
+        renderPassInfo.renderArea.offset = {0, 0};
         renderPassInfo.renderArea.extent = swapChain->GetSwapChainExtent();
 
         // Create clear information
         std::array<VkClearValue, 2> clearValues{};
-        clearValues[0].color = { 0.01f, 0.01f, 0.01f,1.0f };
-        clearValues[1].depthStencil = { 1.0f,0 };
+        clearValues[0].color = {0.01f, 0.01f, 0.01f, 1.0f};
+        clearValues[1].depthStencil = {1.0f, 0};
         renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
         renderPassInfo.pClearValues = clearValues.data();
 
@@ -158,7 +158,7 @@ namespace VulkanEngine
         viewport.height = static_cast<float>(swapChain->GetSwapChainExtent().height);
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
-        VkRect2D scissor{ {0, 0}, swapChain->GetSwapChainExtent() };
+        VkRect2D scissor{{0, 0}, swapChain->GetSwapChainExtent()};
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
     }
@@ -170,5 +170,4 @@ namespace VulkanEngine
 
         vkCmdEndRenderPass(commandBuffer);
     }
-
 }

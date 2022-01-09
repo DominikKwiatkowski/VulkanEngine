@@ -6,6 +6,7 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <memory>
 #include <glm/glm.hpp>
+
 namespace VulkanEngine
 {
     /// <summary>
@@ -14,7 +15,6 @@ namespace VulkanEngine
     class Model
     {
     public:
-
         /// <summary>
         /// Struct represents single Vertex data
         /// </summary>
@@ -54,10 +54,10 @@ namespace VulkanEngine
             void LoadModel(const std::string& filepath);
         };
 
-        Model(Device &device, const ModelData &builder);
+        Model(Device& device, const ModelData& builder);
         ~Model();
         Model(const Model&) = delete;
-        Model &operator=(const Model&) = delete;
+        Model& operator=(const Model&) = delete;
 
         /// <summary>
         /// Load model from file using tiny_obj_loader and create model object
@@ -90,7 +90,7 @@ namespace VulkanEngine
         /// Create index buffer.
         /// </summary>
         /// <param name="indices">Indices to be write to index buffer</param>
-        void CreateIndexBuffer(const std::vector<uint32_t> &indices);
+        void CreateIndexBuffer(const std::vector<uint32_t>& indices);
 
         Device& device;
 
@@ -100,6 +100,5 @@ namespace VulkanEngine
         bool hasIndexBuffer = false;
         std::unique_ptr<Buffer> indexBuffer;
         uint32_t indexCount;
-
     };
 }

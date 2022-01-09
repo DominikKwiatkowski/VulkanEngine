@@ -2,6 +2,7 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
+
 namespace VulkanEngine
 {
     /// <summary>
@@ -38,7 +39,7 @@ namespace VulkanEngine
         /// <param name="position"> Position of camera</param>
         /// <param name="direction"> Direction of camera</param>
         /// <param name="up">Up vector, by default fix vulkan y coordinate</param>
-        void SetViewDirection(glm::vec3 position, glm::vec3 direction, glm::vec3 up = { 0.f,-1.0f,0.f });
+        void SetViewDirection(glm::vec3 position, glm::vec3 direction, glm::vec3 up = {0.f, -1.0f, 0.f});
 
         /// <summary>
         /// Set view to look at specific target.
@@ -46,7 +47,7 @@ namespace VulkanEngine
         /// <param name="position"> Position of camera</param>
         /// <param name="target"> Target position</param>
         /// <param name="up">Up vector, by default fix vulkan y coordinate</param>
-        void SetViewTarget(glm::vec3 position, glm::vec3 target, glm::vec3 up = { 0.f,-1.0f,0.f });
+        void SetViewTarget(glm::vec3 position, glm::vec3 target, glm::vec3 up = {0.f, -1.0f, 0.f});
 
         /// <summary>
         /// Set view by YXZ position.
@@ -66,7 +67,7 @@ namespace VulkanEngine
         }
 
     private:
-        glm::mat4 projectionMatrix{ 1.0f };
-        glm::mat4 viewMatrix{ 1.f };
+        glm::mat4 projectionMatrix{1.0f};
+        glm::mat4 viewMatrix{1.f};
     };
 }

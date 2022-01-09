@@ -12,9 +12,9 @@ namespace VulkanEngine
     {
         int frameIndex;
         float frameTime;
-        Camera &camera;
+        Camera& camera;
         VkCommandBuffer commandBuffer;
         VkDescriptorSet globalDescriptorSet;
-        GameObject::Map &gameObjects;
+        GameObject::Map& gameObjects;
     };
 }

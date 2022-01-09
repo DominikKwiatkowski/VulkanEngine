@@ -14,10 +14,10 @@ namespace std
     /// <summary>
     /// Helper hashing function.
     /// </summary>
-    template<>
+    template <>
     struct hash<VulkanEngine::Model::Vertex>
     {
-        size_t operator()(VulkanEngine::Model::Vertex const &vertex) const
+        size_t operator()(VulkanEngine::Model::Vertex const& vertex) const
         {
             size_t seed;
             VulkanEngine::HashCombine(seed, vertex.position, vertex.color, vertex.normal, vertex.texCord);
@@ -55,14 +55,14 @@ namespace VulkanEngine
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
         stagingBuffer.Map();
-        stagingBuffer.WriteToBuffer((void *)vertices.data(), bufferSize);
+        stagingBuffer.WriteToBuffer((void*)vertices.data(), bufferSize);
 
         // Create vertex buffer.
         vertexBuffer = std::make_unique<Buffer>(device,
-            sizeof(vertices[0]),
-            vertexCount,
-            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+                                                sizeof(vertices[0]),
+                                                vertexCount,
+                                                VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy staging to vertex.
         device.CopyBuffer(stagingBuffer.GetBuffer(), vertexBuffer->GetBuffer(), bufferSize);
@@ -92,10 +92,10 @@ namespace VulkanEngine
 
         // Create index buffer
         indexBuffer = std::make_unique<Buffer>(device,
-            sizeof(indices[0]),
-            indexCount,
-            VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+                                               sizeof(indices[0]),
+                                               indexCount,
+                                               VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
         // Copy staging buffer to index
         device.CopyBuffer(stagingBuffer.GetBuffer(), indexBuffer->GetBuffer(), bufferSize);
@@ -104,8 +104,8 @@ namespace VulkanEngine
 
     void Model::Bind(VkCommandBuffer commandBuffer)
     {
-        VkBuffer buffers[] = { vertexBuffer->GetBuffer() };
-        VkDeviceSize offsets[] = { 0 };
+        VkBuffer buffers[] = {vertexBuffer->GetBuffer()};
+        VkDeviceSize offsets[] = {0};
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
         if (hasIndexBuffer)
         {
@@ -137,10 +137,10 @@ namespace VulkanEngine
     std::vector<VkVertexInputAttributeDescription> Model::Vertex::GetAttributeDescriptions()
     {
         std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
-        attributeDescriptions.push_back({ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position) });
-        attributeDescriptions.push_back({ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) });
-        attributeDescriptions.push_back({ 2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal) });
-        attributeDescriptions.push_back({ 3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCord) });
+        attributeDescriptions.push_back({0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position)});
+        attributeDescriptions.push_back({1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color)});
+        attributeDescriptions.push_back({2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal)});
+        attributeDescriptions.push_back({3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, texCord)});
 
         return attributeDescriptions;
     }
@@ -161,7 +161,7 @@ namespace VulkanEngine
         std::vector<tinyobj::material_t> materials;
         std::string warn, err;
 
-        if(!tinyobj::LoadObj(&attrib,&shapes,&materials,&warn,&err,filepath.c_str()))
+        if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filepath.c_str()))
         {
             throw std::runtime_error(warn + err);
         }
@@ -174,15 +174,15 @@ namespace VulkanEngine
         std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 
         // For each shape in file, load it.
-        for(auto &shape : shapes)
+        for (auto& shape : shapes)
         {
             // For each index in shape index
-            for(auto &index : shape.mesh.indices)
+            for (auto& index : shape.mesh.indices)
             {
                 Vertex vertex{};
 
                 // Read vertex data
-                if(index.vertex_index >= 0)
+                if (index.vertex_index >= 0)
                 {
                     vertex.position =
                     {
@@ -211,7 +211,7 @@ namespace VulkanEngine
                         attrib.texcoords[index.texcoord_index * 2 + 1],
                     };
 
-                    if(uniqueVertices.count(vertex) == 0)
+                    if (uniqueVertices.count(vertex) == 0)
                     {
                         uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
                         vertices.push_back(vertex);
@@ -222,5 +222,4 @@ namespace VulkanEngine
             }
         }
     }
-
 }

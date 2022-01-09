@@ -10,7 +10,8 @@ namespace VulkanEngine
     /// <summary>
     /// Struct to store all pipeline configure info
     /// </summary>
-    struct PipelineConfigInfo {
+    struct PipelineConfigInfo
+    {
         PipelineConfigInfo() = default;
         PipelineConfigInfo(const PipelineConfigInfo&) = delete;
         PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
@@ -41,7 +42,7 @@ namespace VulkanEngine
 
         Pipeline() = default;
         Pipeline(const Pipeline&) = delete;
-        Pipeline &operator=(const Pipeline&) = delete;
+        Pipeline& operator=(const Pipeline&) = delete;
 
         /// <summary>
         /// Bind pipeline to command buffer
@@ -70,7 +71,8 @@ namespace VulkanEngine
         /// <param name="vertFilepath"> Path to vertex shader</param>
         /// <param name="fragFilepath">Path to fragment shader</param>
         /// <param name="configInfo"> configuration of pipeline</param>
-        void CreateGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
+        void CreateGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath,
+                                    const PipelineConfigInfo& configInfo);
 
         /// <summary>
         /// Create shader module from code

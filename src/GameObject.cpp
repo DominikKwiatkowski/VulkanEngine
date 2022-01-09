@@ -31,7 +31,8 @@ namespace VulkanEngine
                 scale.z * (c1 * c2),
                 0.0f,
             },
-            {translation.x, translation.y, translation.z, 1.0f} };
+            {translation.x, translation.y, translation.z, 1.0f}
+        };
     }
 
     glm::mat3 TransformComponent::GetNormalTransformationMatrix()

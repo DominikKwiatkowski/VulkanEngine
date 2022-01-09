@@ -6,15 +6,17 @@
 #include <string>
 #include <vector>
 
-namespace VulkanEngine {
-
-    struct SwapChainSupportDetails {
+namespace VulkanEngine
+{
+    struct SwapChainSupportDetails
+    {
         VkSurfaceCapabilitiesKHR capabilities;
         std::vector<VkSurfaceFormatKHR> formats;
         std::vector<VkPresentModeKHR> presentModes;
     };
 
-    struct QueueFamilyIndices {
+    struct QueueFamilyIndices
+    {
         uint32_t graphicsFamily;
         uint32_t presentFamily;
         bool graphicsFamilyHasValue = false;
@@ -22,7 +24,8 @@ namespace VulkanEngine {
         bool isComplete() { return graphicsFamilyHasValue && presentFamilyHasValue; }
     };
 
-    class Device {
+    class Device
+    {
     public:
 #ifdef NDEBUG
         const bool enableValidationLayers = false;
@@ -101,8 +104,7 @@ namespace VulkanEngine {
         VkQueue graphicsQueue;
         VkQueue presentQueue;
 
-        const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
-        const std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+        const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation", "VK_LAYER_LUNARG_monitor"};
+        const std::vector<const char*> deviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
     };
-
 }

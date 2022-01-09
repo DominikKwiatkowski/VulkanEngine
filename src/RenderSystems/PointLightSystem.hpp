@@ -18,7 +18,7 @@ namespace VulkanEngine
     /// <summary>
     /// System to display light. Point light data is stored in global UBO
     /// </summary>
-    class PointLightSystem : RenderSystem
+    class PointLightSystem : public RenderSystem
     {
     public:
         PointLightSystem(Device &device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);

@@ -61,8 +61,16 @@ namespace VulkanEngine
         }
 
         Camera camera{};
-        ObjectRenderSystem renderSystem{device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout()};
-        PointLightSystem pointLightSystem{ device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout() };
+
+        std::vector<std::unique_ptr<RenderSystem>> renderSystems;
+
+        // Ad object render system
+        renderSystems.push_back(std::make_unique<ObjectRenderSystem>(
+            device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout() ));
+
+        // Add point light render system
+        renderSystems.push_back(std::make_unique<PointLightSystem>(
+            device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout() ));
 
         auto cameraObject = GameObject::CreateGameObject();
         cameraObject.transform.translation.z = -2.5f;
@@ -94,8 +102,13 @@ namespace VulkanEngine
                 uboBuffers[frameIndex]->WriteToBuffer(&ubo);
 
                 renderer.BeginSwapChainRenderPass(commandBuffer);
-                renderSystem.Render(frameInfo);
-                pointLightSystem.Render(frameInfo);
+
+                // Each render system will render this frame
+                for (auto &renderSystem : renderSystems)
+                {
+                    renderSystem->Render(frameInfo);
+                }
+
                 renderer.EndSwapChainRenderPass(commandBuffer);
                 renderer.EndFrame();
             }

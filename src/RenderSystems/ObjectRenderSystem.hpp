@@ -15,7 +15,7 @@
 
 namespace VulkanEngine
 {
-    class ObjectRenderSystem : RenderSystem
+    class ObjectRenderSystem : public RenderSystem
     {
     public:
         ObjectRenderSystem(Device &device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);

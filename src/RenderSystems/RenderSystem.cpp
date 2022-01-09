@@ -6,12 +6,6 @@
 
 namespace VulkanEngine
 {
-    struct PushConstantData
-    {
-        glm::mat4 modelMatrix{1.f};
-        glm::mat4 normalMatrix{1.f};
-    };
-
     RenderSystem::RenderSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout):
         device(device)
     {

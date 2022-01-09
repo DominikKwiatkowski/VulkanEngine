@@ -106,33 +106,33 @@ namespace VulkanEngine
 
     void App::LoadGameObjects()
     {
-        // std::shared_ptr flatModel = Model::CreateModelFromFile(device, "../models/flat_vase.obj");
-        // std::shared_ptr smoothModel = Model::CreateModelFromFile(device, "../models/smooth_vase.obj");
-        // std::shared_ptr floorModel = Model::CreateModelFromFile(device, "../models/quad.obj");
-        //
-        // auto flatVase = GameObject::CreateGameObject();
-        // flatVase.model = flatModel;
-        // flatVase.transform.translation = {0.5, 0.5, 0};
-        // flatVase.transform.scale = {3, 1.5, 3};
-        // gameObjects.emplace(flatVase.GetId(),std::move(flatVase));
-        //
-        // auto smoothVase = GameObject::CreateGameObject();
-        // smoothVase.model = smoothModel;
-        // smoothVase.transform.translation = { -0.5, 0.5, 0 };
-        // smoothVase.transform.scale = { 3, 1.5, 3 };
-        // gameObjects.emplace(smoothVase.GetId(), std::move(smoothVase));
-        //
-        // auto floor = GameObject::CreateGameObject();
-        // floor.model = floorModel;
-        // floor.transform.translation = { 0 ,0.5, 0 };
-        // floor.transform.scale = { 5,1,5 };
-        // gameObjects.emplace(floor.GetId(), std::move(floor));
+        std::shared_ptr flatModel = Model::CreateModelFromFile(device, "../models/flat_vase.obj");
+        std::shared_ptr smoothModel = Model::CreateModelFromFile(device, "../models/smooth_vase.obj");
+        std::shared_ptr floorModel = Model::CreateModelFromFile(device, "../models/quad.obj");
 
-        auto terrain = GameObject::CreateGameObject();
-        terrain.model = Terrain::Generate(device, 1000);
-        terrain.transform.translation = { -5 ,0, -5 };
-        terrain.transform.scale = { 10,1,10 };
-        gameObjects.emplace(terrain.GetId(), std::move(terrain));
+        auto flatVase = GameObject::CreateGameObject();
+        flatVase.model = flatModel;
+        flatVase.transform.translation = {0.5, 0.5, 0};
+        flatVase.transform.scale = {3, 1.5, 3};
+        gameObjects.emplace(flatVase.GetId(),std::move(flatVase));
+
+        auto smoothVase = GameObject::CreateGameObject();
+        smoothVase.model = smoothModel;
+        smoothVase.transform.translation = { -0.5, 0.5, 0 };
+        smoothVase.transform.scale = { 3, 1.5, 3 };
+        gameObjects.emplace(smoothVase.GetId(), std::move(smoothVase));
+
+        auto floor = GameObject::CreateGameObject();
+        floor.model = floorModel;
+        floor.transform.translation = { 0 ,0.5, 0 };
+        floor.transform.scale = { 5,1,5 };
+        gameObjects.emplace(floor.GetId(), std::move(floor));
+
+        // auto terrain = GameObject::CreateGameObject();
+        // terrain.model = Terrain::Generate(device, 1000);
+        // terrain.transform.translation = { -5 ,0, -5 };
+        // terrain.transform.scale = { 10,1,10 };
+        // gameObjects.emplace(terrain.GetId(), std::move(terrain));
     }
 
 

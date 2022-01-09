@@ -24,7 +24,7 @@ void main()
 	vec3 directionToLight = ubo.lightPosition.xyz - fragPosWorld;
 	float attenuation = 1.0 / dot(directionToLight,directionToLight);
 
-	vec3 lightColor = ubo.lightPosition.xyz * ubo.lightPosition.w * attenuation;
+	vec3 lightColor = ubo.lightColor.xyz * ubo.lightColor.w * attenuation;
 	vec3 ambientLight = ubo.ambientLight.xyz * ubo.ambientLight.w;
 	vec3 diffuseLight = lightColor * max(dot(normalize(fragNormalWorld),normalize(directionToLight)), 0);
 

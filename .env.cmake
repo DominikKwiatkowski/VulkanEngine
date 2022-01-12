@@ -7,3 +7,4 @@ set(VULKAN_SDK_PATH  C:/VulkanSDK/1.2.189.1)
  
 # Optional set TINYOBJ_PATH to target specific version, otherwise defaults to external/tinyobjloader
 set(TINYOBJ_PATH D:/domik/Documents/librariesVulkan/tinyobjloader)
+set(STBIMAGE_PATH D:/domik/Documents/librariesVulkan/stbimage)

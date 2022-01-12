@@ -144,11 +144,11 @@ namespace VulkanEngine
         floor.transform.scale = { 5,1,5 };
         gameObjects.emplace(floor.GetId(), std::move(floor));
 
-        auto terrain = GameObject::CreateGameObject();
-        terrain.model = Terrain::Generate(device, 1000);
-        terrain.transform.translation = { -5 ,0, -5 };
-        terrain.transform.scale = { 10,1,10 };
-        gameObjects.emplace(terrain.GetId(), std::move(terrain));
+        // auto terrain = GameObject::CreateGameObject();
+        // terrain.model = Terrain::Generate(device, 1000);
+        // terrain.transform.translation = { -5 ,0, -5 };
+        // terrain.transform.scale = { 10,1,10 };
+        // gameObjects.emplace(terrain.GetId(), std::move(terrain));
     }
 
 

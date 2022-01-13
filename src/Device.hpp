@@ -74,6 +74,7 @@ namespace VulkanEngine
             VkImage& image,
             VkDeviceMemory& imageMemory);
         void TransitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
+        void CreateImageView(VkImage image, VkFormat format, VkImageView& imageView);
 
         VkPhysicalDeviceProperties properties;
 

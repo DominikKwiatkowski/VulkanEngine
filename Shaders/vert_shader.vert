@@ -8,6 +8,7 @@ layout(location = 3) in vec2 texCord;
 layout(location = 0) out vec3 fragColor;
 layout(location = 1) out vec3 fragPosWorld;
 layout(location = 2) out vec3 fragNormalWorld;
+layout(location = 3) out vec2 fragTexCord;
 
 layout(push_constant) uniform Push{
 	mat4 modelMatrix;
@@ -29,4 +30,5 @@ void main(){
 	fragNormalWorld = normalize(mat3(push.normalMatrix) * normal);
 	fragPosWorld = vertexPosition.xyz;
 	fragColor = color;
+	fragTexCord = texCord;
 }

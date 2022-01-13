@@ -100,4 +100,9 @@ namespace VulkanEngine
         samplerInfo.minLod = 0.0f;
         samplerInfo.maxLod = 0.0f;
     }
+
+    VkDescriptorImageInfo Image::GetDescriptorInfo(VkImageLayout currentLayout)
+    {
+        return VkDescriptorImageInfo{ imageSampler,imageView, currentLayout };
+    }
 }

@@ -28,6 +28,7 @@ namespace VulkanEngine
         globalPool = DescriptorPool::Builder(device)
             .SetMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT)
             .AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT)
+            .AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SwapChain::MAX_FRAMES_IN_FLIGHT)
             .Build();
 
         LoadGameObjects();
@@ -52,14 +53,19 @@ namespace VulkanEngine
 
         auto globalSetLayout = DescriptorSetLayout::Builder(device)
             .AddBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)
+            .AddBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT)
             .Build();
 
         std::vector<VkDescriptorSet> globalDescriptorSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
+        auto texture = Image::LoadImageFromFile("../textures/vase_texture.jpg", device);
+        auto textureInfo = texture->GetDescriptorInfo(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         for(int i = 0; i< globalDescriptorSets.size();i++)
         {
             auto bufferInfo = uboBuffers[i]->DescriptorInfo();
+
             DescriptorWriter(*globalSetLayout, *globalPool)
                 .WriteBuffer(0, &bufferInfo)
+                .WriteImage(1,&textureInfo)
                 .Build(globalDescriptorSets[i]);
         }
 
@@ -145,7 +151,7 @@ namespace VulkanEngine
         floor.transform.scale = { 5,1,5 };
         gameObjects.emplace(floor.GetId(), std::move(floor));
 
-        auto texture = Image::LoadImageFromFile("../textures/vase_texture.jpg", device);
+
         // auto terrain = GameObject::CreateGameObject();
         // terrain.model = Terrain::Generate(device, 1000);
         // terrain.transform.translation = { -5 ,0, -5 };

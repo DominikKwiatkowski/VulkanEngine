@@ -26,8 +26,10 @@ namespace VulkanEngine
 
         VkImageView GetImageView()
         {
-        return imageView;
+            return imageView;
         }
+
+        VkDescriptorImageInfo GetDescriptorInfo(VkImageLayout currentLayout);
     private:
         Device& device;
         VkImage image = VK_NULL_HANDLE;

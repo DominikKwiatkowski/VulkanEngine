@@ -10,6 +10,7 @@
 #include "Pipeline.hpp"
 #include "GameObject.hpp"
 #include "Camera.hpp"
+#include "Descriptors.hpp"
 #include "FrameInfo.hpp"
 #include "RenderSystem.hpp"
 
@@ -21,7 +22,7 @@ namespace VulkanEngine
     class ObjectRenderSystem : public RenderSystem
     {
     public:
-        ObjectRenderSystem(Device& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
+        ObjectRenderSystem(Device& device, VkRenderPass renderPass, std::vector<VkDescriptorSetLayout> descriptorSetLayouts, std::shared_ptr<DescriptorPool> globalPool);
 
         /// <summary>
         /// Render all objects inside frameInfo.
@@ -30,13 +31,16 @@ namespace VulkanEngine
         void Render(FrameInfo frameInfo) override;
 
     private:
-        void CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout);
+        void CreatePipelineLayout(std::vector<VkDescriptorSetLayout> descriptorSetLayouts);
         void CreatePipeline(VkRenderPass renderPass);
 
         struct PushConstantData
         {
             glm::mat4 modelMatrix{1.f};
             glm::mat4 normalMatrix{1.f};
+            bool hasTexture;
         };
+
+        std::shared_ptr<DescriptorPool> globalPool;
     };
 }

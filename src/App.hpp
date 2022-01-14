@@ -44,7 +44,7 @@ namespace VulkanEngine
         Device device{window};
         Renderer renderer{window, device};
 
-        std::unique_ptr<DescriptorPool> globalPool{};
+        std::shared_ptr<DescriptorPool> globalPool{};
         GameObject::Map gameObjects;
 
         /// <summary>

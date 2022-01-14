@@ -13,6 +13,7 @@ layout(location = 3) out vec2 fragTexCord;
 layout(push_constant) uniform Push{
 	mat4 modelMatrix;
 	mat4 normalMatrix;
+	int hasTexture;
 }push;
 
 layout(set = 0, binding = 0) uniform GlobalUbo {

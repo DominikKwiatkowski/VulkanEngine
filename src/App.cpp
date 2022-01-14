@@ -25,13 +25,13 @@ namespace VulkanEngine
 
     App::App()
     {
-        globalPool = DescriptorPool::Builder(device)
-            .SetMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT)
-            .AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT)
-            .AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SwapChain::MAX_FRAMES_IN_FLIGHT)
-            .Build();
-
         LoadGameObjects();
+
+        globalPool = DescriptorPool::Builder(device)
+            .SetMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT + gameObjects.size())
+            .AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT)
+            .AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, gameObjects.size())
+            .Build();
     }
 
     App::~App()
@@ -53,20 +53,30 @@ namespace VulkanEngine
 
         auto globalSetLayout = DescriptorSetLayout::Builder(device)
             .AddBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)
-            .AddBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,VK_SHADER_STAGE_FRAGMENT_BIT)
+            .Build();
+
+        std::shared_ptr modelSetLayout = DescriptorSetLayout::Builder(device)
+            .AddBinding(0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
             .Build();
 
         std::vector<VkDescriptorSet> globalDescriptorSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
-        auto texture = Image::LoadImageFromFile("../textures/vase_texture.jpg", device);
-        auto textureInfo = texture->GetDescriptorInfo(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         for(int i = 0; i< globalDescriptorSets.size();i++)
         {
             auto bufferInfo = uboBuffers[i]->DescriptorInfo();
 
             DescriptorWriter(*globalSetLayout, *globalPool)
                 .WriteBuffer(0, &bufferInfo)
-                .WriteImage(1,&textureInfo)
                 .Build(globalDescriptorSets[i]);
+        }
+
+        for (auto& object : gameObjects)
+        {
+            if(object.second.texture != nullptr)
+            {
+                DescriptorWriter(*modelSetLayout, *globalPool)
+                   .WriteImage(0, &object.second.texture->GetDescriptorInfo(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL))
+                   .Build(object.second.descriptorSet);
+            }
         }
 
         Camera camera{};
@@ -75,7 +85,7 @@ namespace VulkanEngine
 
         // Ad object render system
         renderSystems.push_back(std::make_unique<ObjectRenderSystem>(
-            device, renderer.getSwapChainRenderPass(),globalSetLayout->GetDescriptorSetLayout() ));
+            device, renderer.getSwapChainRenderPass(), std::vector{ globalSetLayout->GetDescriptorSetLayout(), modelSetLayout->GetDescriptorSetLayout() }, globalPool));
 
         // Add point light render system
         renderSystems.push_back(std::make_unique<PointLightSystem>(
@@ -132,23 +142,28 @@ namespace VulkanEngine
         std::shared_ptr flatModel = Model::CreateModelFromFile(device, "../models/flat_vase.obj");
         std::shared_ptr smoothModel = Model::CreateModelFromFile(device, "../models/smooth_vase.obj");
         std::shared_ptr floorModel = Model::CreateModelFromFile(device, "../models/quad.obj");
+        std::shared_ptr vaseTexture = Image::LoadImageFromFile("../textures/vase_texture.jpg", device);
+        std::shared_ptr floorTexture = Image::LoadImageFromFile("../textures/floor_texture.jfif", device);
 
         auto flatVase = GameObject::CreateGameObject();
         flatVase.model = flatModel;
         flatVase.transform.translation = {0.5, 0.5, 0};
         flatVase.transform.scale = {3, 1.5, 3};
+        flatVase.texture = vaseTexture;
         gameObjects.emplace(flatVase.GetId(),std::move(flatVase));
 
         auto smoothVase = GameObject::CreateGameObject();
         smoothVase.model = smoothModel;
         smoothVase.transform.translation = { -0.5, 0.5, 0 };
         smoothVase.transform.scale = { 3, 1.5, 3 };
+        smoothVase.texture = vaseTexture;
         gameObjects.emplace(smoothVase.GetId(), std::move(smoothVase));
 
         auto floor = GameObject::CreateGameObject();
         floor.model = floorModel;
         floor.transform.translation = { 0 ,0.5, 0 };
         floor.transform.scale = { 5,1,5 };
+        floor.texture = floorTexture;
         gameObjects.emplace(floor.GetId(), std::move(floor));
 
 

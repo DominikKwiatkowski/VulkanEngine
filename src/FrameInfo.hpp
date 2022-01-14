@@ -1,10 +1,11 @@
 #pragma once
 #include "Camera.hpp"
-
+#include "Descriptors.hpp"
 #include <vulkan/vulkan.h>
 
 namespace VulkanEngine
 {
+
     /// <summary>
     /// Struct to wrap all information about frame.
     /// </summary>

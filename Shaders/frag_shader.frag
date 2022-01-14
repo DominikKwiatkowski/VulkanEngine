@@ -10,6 +10,7 @@ layout(location = 0) out vec4 outColor;
 layout(push_constant) uniform Push{
 	mat4 modelMatrix;
 	mat4 normalMatrix;
+	int hasTexture;
 }push;
 
 layout(set = 0, binding = 0) uniform GlobalUbo {
@@ -19,7 +20,7 @@ layout(set = 0, binding = 0) uniform GlobalUbo {
   vec4 lightPosition;
   vec4 lightColor;
 } ubo;
-layout(set = 0, binding = 1) uniform sampler2D texSampler;
+layout(set = 1, binding = 0) uniform sampler2D texSampler;
 
 void main()
 {
@@ -30,5 +31,12 @@ void main()
 	vec3 ambientLight = ubo.ambientLight.xyz * ubo.ambientLight.w;
 	vec3 diffuseLight = lightColor * max(dot(normalize(fragNormalWorld),normalize(directionToLight)), 0);
 
-	outColor = vec4((diffuseLight + ambientLight),1) * texture(texSampler,fragTexCoord);
+	if(push.hasTexture != 0)
+	{
+		outColor = vec4((diffuseLight + ambientLight),1) * texture(texSampler,fragTexCoord);
+	}
+	else
+	{
+		outColor = vec4((diffuseLight + ambientLight) * fragColor,1);
+	}
 }

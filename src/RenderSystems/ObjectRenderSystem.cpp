@@ -4,25 +4,24 @@
 #include <array>
 #include <stdexcept>
 
+#include "Descriptors.hpp"
+
 namespace VulkanEngine
 {
     ObjectRenderSystem::ObjectRenderSystem(Device& device, VkRenderPass renderPass,
-                                           VkDescriptorSetLayout globalSetLayout):
-        RenderSystem(device)
+        std::vector<VkDescriptorSetLayout> descriptorSetLayouts, std::shared_ptr<DescriptorPool> globalPool):
+        RenderSystem(device), globalPool(globalPool)
     {
-        CreatePipelineLayout(globalSetLayout);
+        CreatePipelineLayout(descriptorSetLayouts);
         CreatePipeline(renderPass);
     }
 
-    void ObjectRenderSystem::CreatePipelineLayout(VkDescriptorSetLayout globalSetLayout)
+    void ObjectRenderSystem::CreatePipelineLayout(std::vector<VkDescriptorSetLayout> descriptorSetLayouts)
     {
         VkPushConstantRange pushConstantRange{};
         pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
         pushConstantRange.size = sizeof(PushConstantData);
         pushConstantRange.offset = 0;
-
-        std::vector<VkDescriptorSetLayout> descriptorSetLayouts{};
-        descriptorSetLayouts.push_back(globalSetLayout);
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -65,15 +64,30 @@ namespace VulkanEngine
             0,
             nullptr);
 
+
+
         for (auto& kv : frameInfo.gameObjects)
         {
             PushConstantData push{};
             push.modelMatrix = kv.second.transform.GetTransformationMatrix();
             push.normalMatrix = kv.second.transform.GetNormalTransformationMatrix();
-
+            push.hasTexture = kv.second.texture != nullptr;
+            if(push.hasTexture)
+            {
+                vkCmdBindDescriptorSets(
+                    frameInfo.commandBuffer,
+                    VK_PIPELINE_BIND_POINT_GRAPHICS,
+                    pipelineLayout,
+                    1,
+                    1,
+                    &kv.second.descriptorSet,
+                    0,
+                    nullptr);
+            }
             vkCmdPushConstants(frameInfo.commandBuffer, pipelineLayout,
                                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstantData),
                                &push);
+
             kv.second.model->Bind(frameInfo.commandBuffer);
             kv.second.model->Draw(frameInfo.commandBuffer);
         }

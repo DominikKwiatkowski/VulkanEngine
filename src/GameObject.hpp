@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Image.hpp"
+
 namespace VulkanEngine
 {
     struct TransformComponent
@@ -27,7 +29,6 @@ namespace VulkanEngine
         glm::mat3 GetNormalTransformationMatrix();
     };
 
-
     class GameObject
     {
     public:
@@ -46,8 +47,10 @@ namespace VulkanEngine
         GameObject& operator=(GameObject&&) = default;
 
         std::shared_ptr<Model> model{};
+        std::shared_ptr<Image> texture{};
         glm::vec3 color{};
         TransformComponent transform{};
+        VkDescriptorSet descriptorSet;
 
     private:
         GameObject(id_t id) : id(id)

@@ -28,9 +28,9 @@ namespace VulkanEngine
         LoadGameObjects();
 
         globalPool = DescriptorPool::Builder(device)
-            .SetMaxSets(SwapChain::MAX_FRAMES_IN_FLIGHT + gameObjects.size())
+            .SetMaxSets(static_cast<uint32_t>(gameObjects.size()) + SwapChain::MAX_FRAMES_IN_FLIGHT)
             .AddPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SwapChain::MAX_FRAMES_IN_FLIGHT)
-            .AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, gameObjects.size())
+            .AddPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, static_cast<uint32_t>(gameObjects.size()))
             .Build();
     }
 

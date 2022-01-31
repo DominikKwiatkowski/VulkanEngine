@@ -10,16 +10,15 @@
 
 namespace VulkanEngine
 {
-    Image::Image(Device& device, VkImageCreateInfo imageInfo, VkMemoryPropertyFlagBits memoryProperties)
+    Image::Image(Device& device, VkImageCreateInfo imageInfo, VkMemoryPropertyFlagBits memoryProperties,
+                 VkImageSubresourceRange subresourceRange, VkSamplerCreateInfo samplerInfo)
         : device(device)
     {
         device.CreateImageWithInfo(imageInfo, memoryProperties, image, imageMemory);
-        device.CreateImageView(image, imageInfo.format, imageView);
-        VkSamplerCreateInfo samplerInfo = {};
-        DefaultSamplerCreateInfo(samplerInfo, device);
+        device.CreateImageView(image, imageInfo.format, imageView, subresourceRange);
         if (vkCreateSampler(device.GetDevice(), &samplerInfo, nullptr, &imageSampler) != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create texture sampler!");
+            throw std::runtime_error("failed to create sampler!");
         }
     }
 
@@ -54,16 +53,21 @@ namespace VulkanEngine
         stbi_image_free(pixels);
 
         VkImageCreateInfo imageInfo = {};
-        DefaultImageCreateInfo(imageInfo, width, height);
-        auto image = std::make_unique<Image>(device, imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-        device.TransitionImageLayout(image->GetImage(), VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        DefaultImageCreateInfo(imageInfo, width, height, VK_FORMAT_R8G8B8A8_SRGB,
+                               VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
+        VkSamplerCreateInfo samplerInfo = {};
+        DefaultSamplerCreateInfo(samplerInfo, device);
+        auto image = std::make_unique<Image>(device, imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,Device::defaultSubresourceRange, samplerInfo);
+        device.TransitionImageLayout(image->GetImage(), VK_IMAGE_LAYOUT_UNDEFINED,
+                                     VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, Device::defaultSubresourceRange);
         device.CopyBufferToImage(stagingBuffer.GetBuffer(), image->GetImage(), width, height, 1);
         device.TransitionImageLayout(image->GetImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+                                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, Device::defaultSubresourceRange);
         return image;
     }
 
-    void Image::DefaultImageCreateInfo(VkImageCreateInfo& imageInfo, int imageWidth, int imageHeight)
+    void Image::DefaultImageCreateInfo(VkImageCreateInfo& imageInfo, int imageWidth, int imageHeight, VkFormat format,
+                                       VkImageUsageFlags usage)
     {
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -72,10 +76,10 @@ namespace VulkanEngine
         imageInfo.extent.depth = 1;
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
-        imageInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
+        imageInfo.format = format;
         imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+        imageInfo.usage = usage;
         imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
         imageInfo.flags = 0; // Optional
@@ -103,6 +107,6 @@ namespace VulkanEngine
 
     VkDescriptorImageInfo Image::GetDescriptorInfo(VkImageLayout currentLayout)
     {
-        return VkDescriptorImageInfo{ imageSampler,imageView, currentLayout };
+        return VkDescriptorImageInfo{imageSampler, imageView, currentLayout};
     }
 }

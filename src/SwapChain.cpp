@@ -9,6 +9,8 @@
 #include <set>
 #include <stdexcept>
 
+#include "Image.hpp"
+
 namespace VulkanEngine
 {
     SwapChain::SwapChain(Device& deviceRef, VkExtent2D extent)
@@ -216,7 +218,7 @@ namespace VulkanEngine
         swapChainImageViews.resize(swapChainImages.size());
         for (size_t i = 0; i < swapChainImages.size(); i++)
         {
-            device.CreateImageView(swapChainImages[i], swapChainImageFormat, swapChainImageViews[i]);
+            device.CreateImageView(swapChainImages[i], swapChainImageFormat, swapChainImageViews[i], Device::defaultSubresourceRange);
         }
     }
 
@@ -232,7 +234,7 @@ namespace VulkanEngine
         depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-        VkAttachmentReference depthAttachmentRef{};
+        VkAttachmentReference depthAttachmentRef;
         depthAttachmentRef.attachment = 1;
         depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
@@ -246,7 +248,7 @@ namespace VulkanEngine
         colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
-        VkAttachmentReference colorAttachmentRef = {};
+        VkAttachmentReference colorAttachmentRef;
         colorAttachmentRef.attachment = 0;
         colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
@@ -325,20 +327,8 @@ namespace VulkanEngine
         for (int i = 0; i < depthImages.size(); i++)
         {
             VkImageCreateInfo imageInfo{};
-            imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-            imageInfo.imageType = VK_IMAGE_TYPE_2D;
-            imageInfo.extent.width = swapChainExtent.width;
-            imageInfo.extent.height = swapChainExtent.height;
-            imageInfo.extent.depth = 1;
-            imageInfo.mipLevels = 1;
-            imageInfo.arrayLayers = 1;
-            imageInfo.format = depthFormat;
-            imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-            imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            imageInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-            imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-            imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            imageInfo.flags = 0;
+            Image::DefaultImageCreateInfo(imageInfo, swapChainExtent.width, swapChainExtent.height, depthFormat,
+                                          VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
 
             device.CreateImageWithInfo(
                 imageInfo,
@@ -346,21 +336,8 @@ namespace VulkanEngine
                 depthImages[i],
                 depthImageMemorys[i]);
 
-            VkImageViewCreateInfo viewInfo{};
-            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            viewInfo.image = depthImages[i];
-            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            viewInfo.format = depthFormat;
-            viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-            viewInfo.subresourceRange.baseMipLevel = 0;
-            viewInfo.subresourceRange.levelCount = 1;
-            viewInfo.subresourceRange.baseArrayLayer = 0;
-            viewInfo.subresourceRange.layerCount = 1;
-
-            if (vkCreateImageView(device.GetDevice(), &viewInfo, nullptr, &depthImageViews[i]) != VK_SUCCESS)
-            {
-                throw std::runtime_error("failed to create texture image view!");
-            }
+            device.CreateImageView(depthImages[i], depthFormat, depthImageViews[i],
+                                   {VK_IMAGE_ASPECT_DEPTH_BIT, 0, 1, 0, 1});
         }
     }
 

@@ -73,9 +73,12 @@ namespace VulkanEngine
             VkMemoryPropertyFlags properties,
             VkImage& image,
             VkDeviceMemory& imageMemory);
-        void TransitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout);
-        void CreateImageView(VkImage image, VkFormat format, VkImageView& imageView);
+        void TransitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout,
+                                   VkImageSubresourceRange subresourceRange);
+        void CreateImageView(VkImage image, VkFormat format, VkImageView& imageView,
+            VkImageSubresourceRange subresourceRange);
 
+        static constexpr  VkImageSubresourceRange defaultSubresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
         VkPhysicalDeviceProperties properties;
 
     private:

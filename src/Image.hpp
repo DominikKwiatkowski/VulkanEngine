@@ -10,13 +10,15 @@ namespace VulkanEngine
     class Image
     {
     public:
-        Image(Device& device, VkImageCreateInfo imageInfo, VkMemoryPropertyFlagBits memoryProperties);
+        Image(Device& device, VkImageCreateInfo imageInfo, VkMemoryPropertyFlagBits memoryProperties,
+            VkImageSubresourceRange subresourceRange, VkSamplerCreateInfo samplerInfo);
         ~Image();
         Image(const Image&) = delete;
         Image& operator=(const Image&) = delete;
 
         static std::unique_ptr<Image> LoadImageFromFile(const std::string& filepath, Device& device);
-        static void DefaultImageCreateInfo(VkImageCreateInfo& imageInfo, int imageWidth, int imageHeight);
+        static void DefaultImageCreateInfo(VkImageCreateInfo& imageInfo, int imageWidth, int imageHeight,
+                                           VkFormat format, VkImageUsageFlags usage);
         static void DefaultSamplerCreateInfo(VkSamplerCreateInfo& samplerInfo, Device& device);
 
         VkImage GetImage()

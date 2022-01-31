@@ -85,7 +85,7 @@ namespace VulkanEngine
 
         // Ad object render system
         renderSystems.push_back(std::make_unique<ObjectRenderSystem>(
-            device, renderer.getSwapChainRenderPass(), std::vector{ globalSetLayout->GetDescriptorSetLayout(), modelSetLayout->GetDescriptorSetLayout() }, globalPool));
+            device, renderer.getSwapChainRenderPass(), std::vector{ globalSetLayout->GetDescriptorSetLayout(), modelSetLayout->GetDescriptorSetLayout() }));
 
         // Add point light render system
         renderSystems.push_back(std::make_unique<PointLightSystem>(

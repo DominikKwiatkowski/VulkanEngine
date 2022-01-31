@@ -608,7 +608,9 @@ namespace VulkanEngine
         }
     }
 
-    void Device::TransitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout)
+    void Device::TransitionImageLayout(VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout,
+                                       VkImageSubresourceRange
+                                       subresourceRange)
     {
         VkCommandBuffer commandBuffer = BeginSingleTimeCommands();
 
@@ -619,11 +621,7 @@ namespace VulkanEngine
         barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.image = image;
-        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        barrier.subresourceRange.baseMipLevel = 0;
-        barrier.subresourceRange.levelCount = 1;
-        barrier.subresourceRange.baseArrayLayer = 0;
-        barrier.subresourceRange.layerCount = 1;
+        barrier.subresourceRange = subresourceRange;
 
         VkPipelineStageFlags sourceStage;
         VkPipelineStageFlags destinationStage;
@@ -662,18 +660,14 @@ namespace VulkanEngine
         EndSingleTimeCommands(commandBuffer);
     }
 
-    void Device::CreateImageView(VkImage image, VkFormat format, VkImageView& imageView)
+    void Device::CreateImageView(VkImage image, VkFormat format, VkImageView& imageView, VkImageSubresourceRange subresourceRange)
     {
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         viewInfo.image = image;
         viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
         viewInfo.format = format;
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        viewInfo.subresourceRange.baseMipLevel = 0;
-        viewInfo.subresourceRange.levelCount = 1;
-        viewInfo.subresourceRange.baseArrayLayer = 0;
-        viewInfo.subresourceRange.layerCount = 1;
+        viewInfo.subresourceRange = subresourceRange;
 
         if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS)
         {

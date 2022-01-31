@@ -9,8 +9,8 @@
 namespace VulkanEngine
 {
     ObjectRenderSystem::ObjectRenderSystem(Device& device, VkRenderPass renderPass,
-        std::vector<VkDescriptorSetLayout> descriptorSetLayouts, std::shared_ptr<DescriptorPool> globalPool):
-        RenderSystem(device), globalPool(globalPool)
+        std::vector<VkDescriptorSetLayout> descriptorSetLayouts):
+        RenderSystem(device)
     {
         CreatePipelineLayout(descriptorSetLayouts);
         CreatePipeline(renderPass);

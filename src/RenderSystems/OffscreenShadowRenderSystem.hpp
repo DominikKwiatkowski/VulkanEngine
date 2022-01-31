@@ -17,13 +17,12 @@
 namespace VulkanEngine
 {
     /// <summary>
-    /// Class to render normal game objects
+    /// Class to render shadows to offscreen renderer
     /// </summary>
-    class ObjectRenderSystem : public RenderSystem
+    class OffscreenShadowRenderSystem : public RenderSystem
     {
     public:
-        ObjectRenderSystem(Device& device, VkRenderPass renderPass, std::vector<VkDescriptorSetLayout> descriptorSetLayouts);
-
+        OffscreenShadowRenderSystem(Device& device, VkRenderPass renderPass, std::vector<VkDescriptorSetLayout> descriptorSetLayouts);
         /// <summary>
         /// Render all objects inside frameInfo.
         /// </summary>
@@ -36,9 +35,7 @@ namespace VulkanEngine
 
         struct PushConstantData
         {
-            glm::mat4 modelMatrix{1.f};
-            glm::mat4 normalMatrix{1.f};
-            bool hasTexture;
+            glm::mat4 viewMatrix{ 1.f };
         };
     };
 }
